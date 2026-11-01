@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear cuenta</title>
+    <link rel="stylesheet" href="../style/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="icon" href="../img/logoapp.png" type="image/png">
+</head>
+<body>
+<main>
+    <h1 class="titulo-formulario">Crear Cuenta</h1>
+        <form class="formulario" action="#" method="POST">
+        <div class="contenedor-campos">
+        <div class="campo-formulario">
+            <label class="titulo-campo" for="nombre">Nombre completo</label>
+            <input class="input-formulario" type="text" id="nombre" name="nombre" placeholder="Ingresa tu nombre completo" required>
+        </div>
+        <div class="campo-formulario">
+            <label class="titulo-campo" for="correo">Correo electrónico</label>
+            <input class="input-formulario" type="email" id="correo" name="correo" placeholder="ejemplo@correo.com" required>
+        </div>
+
+        <div class="campo-formulario">
+            <label class="titulo-campo" for="contrasena">Contraseña</label>
+            <input class="input-formulario" type="password" id="contrasena" name="contrasena" placeholder="Ingresa tu contraseña" required>
+        </div>
+        <div class="campo-formulario">
+            <label class="titulo-campo" for="confirmar-contrasena">Confirmar contraseña</label>
+            <input class="input-formulario" type="password" id="confirmar-contrasena" name="confirmar_contrasena" placeholder="Repite tu contraseña" required>
+        </div>
+        <div class="campo-formulario">
+            <label class="titulo-campo" for="moneda">Moneda predeterminada</label>
+            <select class="input-formulario" id="moneda" name="moneda" required>
+                <option value="" disabled selected>Selecciona una moneda</option>
+                <option value="ARS">Peso Argentino (ARS)</option>
+                <option value="USD">Dólar Estadounidense (USD)</option>
+                <option value="EUR">Euro (EUR)</option>
+                <option value="MXN">Peso Mexicano (MXN)</option>
+                <option value="CLP">Peso Chileno (CLP)</option>
+                <option value="COP">Peso Colombiano (COP)</option>
+            </select>
+        </div>
+        </div>
+        <button class="boton-enviar" type="submit">Crear cuenta</button>
+        <a class="texto-cuenta" href="../htmls/iniciarsesion.html">Ya tengo cuenta</a>
+        </form>
+</main>
+</body>
+</html>

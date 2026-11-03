@@ -5,6 +5,7 @@
     --dominante-claro: #fbf8ef;
     --subordinado: #264537;
     --subordinado-sombra: rgb(42, 53, 40);
+    --subordinado-claro: #9ebda8;
     --acento: #7e9ebc;
     --acento-sombra: #6785a0;
     --texto: #515a57;
@@ -310,4 +311,81 @@ footer {
 .icono-nuevomovimiento-footer {
     width: 24px;
     height: auto;
+}
+
+/* Header */
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.logo-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-app-header {
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo-texto-header {
+    color: var(--subordinado);
+    font-size: 27px;
+    font-weight: bold;
+}
+
+.micuenta-header {
+    text-decoration: none;
+}
+
+.foto-perfil-header {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Nuevo movimiento */
+
+/* PESTAÑAS DE INGRESOS Y GASTOS */
+
+.pestanas-movimiento {
+    display: flex;
+    width: 100%;
+    gap: 5px;
+    margin-bottom: 25px;
+    background-color: var(--fondo-secundario);
+    padding: 5px;
+    border-radius: 12px;
+}
+
+.pestana-movimiento {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 9px;
+    background: transparent;
+    color: var(--subordinado);
+    font-family: inherit;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.pestana-movimiento.activa {
+    background-color: var(--subordinado);
+    color: var(--fondo);
+    font-weight: bold;
 }

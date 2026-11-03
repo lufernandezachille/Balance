@@ -142,7 +142,7 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 80%;
+    width: 90%;
     margin-left: auto;
     margin-right: auto;
 }
@@ -151,7 +151,7 @@ main {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    width: 400px;
+    width: 100%;
     margin-bottom: 20px;
 }
 
@@ -164,24 +164,25 @@ main {
 }
 
 .input-formulario {
-    width: 300px;
-    padding: 20px;
-    border: 2px solid var(--acento);
-    border-radius: 50px;
-    font-size: 16px;
+    width: 100%;
+    padding: 15px;
+    border: 2px solid var(--dominante-sombra);
+    border-radius: 10px;
+    font-size: 18px;
     cursor: pointer;
     font-family: "Urbanist", sans-serif;
+    align-self: center;
 }
 
 .boton-enviar {
     background-color: var(--subordinado);
     color: var(--dominante);
     border: 2px solid var(--dominante);
-    border-radius: 50px;
+    border-radius: 10px;
     padding: 15px 20px;
     font-size: 16px;
     cursor: pointer;
-    width: 50%;
+    width: 60%;
     text-decoration: none;
     font-family: "Urbanist", sans-serif;
     font-size: 20px;
@@ -202,7 +203,7 @@ main {
 }
 
 select.input-formulario {
-    width: 344px;
+    width: 100%;
     box-sizing: border-box;
     cursor: pointer;
     font-family: "Urbanist", sans-serif;
@@ -359,33 +360,89 @@ footer {
 }
 
 /* Nuevo movimiento */
-
-/* PESTAÑAS DE INGRESOS Y GASTOS */
+.titulo-pagina {
+    color: var(--subordinado);
+    margin-left: 25px;
+    font-size: 24px;
+    margin-bottom: 25px;
+}
 
 .pestanas-movimiento {
     display: flex;
-    width: 100%;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
     gap: 5px;
     margin-bottom: 25px;
-    background-color: var(--fondo-secundario);
-    padding: 5px;
-    border-radius: 12px;
+    background-color: var(--dominante-sombra);
+    border-radius: 50px;
 }
 
 .pestana-movimiento {
     flex: 1;
-    padding: 12px;
+    padding: 12px 5px;
     border: none;
-    border-radius: 9px;
+    border-radius: 50px;
     background: transparent;
     color: var(--subordinado);
     font-family: inherit;
     font-size: 16px;
+    font-weight: 500;
     cursor: pointer;
 }
 
 .pestana-movimiento.activa {
-    background-color: var(--subordinado);
-    color: var(--fondo);
+    background-color: var(--acento-sombra);
+    color: var(--dominante-claro);
     font-weight: bold;
+}
+
+.contenedor-monto {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    align-self: center;
+}
+
+.contenedor-monto select {
+    width: 35%;
+}
+
+.contenedor-monto input {
+    width: 100%;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+#boton-movimiento {
+    display: flex;
+    background-color: var(--subordinado);
+    color: var(--dominante);
+    border: 2px solid var(--dominante);
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: "Urbanist", sans-serif;
+    font-size: 20px;
+    padding: 15px 20px;
+    justify-content: center;
+    align-items: center;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.campo-fecha {
+    width: calc(100% - 30px);
+}
+
+#datos-recurrencia {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: center;
 }

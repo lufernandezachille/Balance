@@ -22,35 +22,36 @@
     </header>
 
 <main>
-    <h1 class="titulo-formulario">Nuevo movimiento</h1>
+    <h1 class="titulo-pagina">Nuevo movimiento</h1>
     <div class="pestanas-movimiento">
-            <button class="pestana-movimiento activa" type="button" id="pestana-ingreso" onclick="cambiarTipo('ingreso')">Ingreso</button>
-            <button class="pestana-movimiento" type="button" id="pestana-gasto" onclick="cambiarTipo('gasto')">Gasto</button>
+        <button class="pestana-movimiento activa" type="button" id="pestana-ingreso" onclick="cambiarTipo('ingreso')">
+            Ingreso
+        </button>
+        <button class="pestana-movimiento" type="button" id="pestana-gasto" onclick="cambiarTipo('gasto')">
+            Gasto
+        </button>
+        <button class="pestana-movimiento" type="button" id="pestana-transferencia" onclick="cambiarTipo('transferencia')">
+            Transferencia
+        </button>
     </div>
     <form class="formulario" action="#" method="POST">
         <input type="hidden" id="tipo" name="tipo" value="ingreso">
         <div class="contenedor-campos">
             <div class="campo-formulario">
-                <label class="titulo-campo" for="importe">Importe</label>
-                <input class="input-formulario" type="number" id="importe" name="importe" placeholder="Ingresa el importe" min="0.01" step="0.01"required>
+                <label class="titulo-campo" for="importe">Monto</label>
+                <div class="contenedor-monto">
+                    <select class="input-formulario" id="moneda" name="moneda" required>
+                        <option value="ARS" selected>ARS</option>
+                        <option value="USD">USD</option>
+                        <option value="EUR">EUR</option>
+                        <option value="MXN">MXN</option>
+                        <option value="CLP">CLP</option>
+                        <option value="COP">COP</option>
+                    </select>
+                    <input class="input-formulario" type="number" id="importe" name="importe" placeholder="0,00" min="0.01" step="0.01" required>
+                </div>
             </div>
 
-            <div class="campo-formulario">
-                <label class="titulo-campo" for="moneda">Moneda</label>
-                <select class="input-formulario" id="moneda" name="moneda" required>
-                    <option value="" disabled selected>
-                        Selecciona una moneda
-                    </option>
-                    <option value="ARS">Peso argentino (ARS)</option>
-                    <option value="USD">Dólar estadounidense (USD)</option>
-                    <option value="EUR">Euro (EUR)</option>
-                    <option value="MXN">Peso mexicano (MXN)</option>
-                    <option value="CLP">Peso chileno (CLP)</option>
-                    <option value="COP">Peso colombiano (COP)</option>
-                </select>
-            </div>
-
-            <!-- CATEGORÍA -->
             <div class="campo-formulario">
                 <label class="titulo-campo" for="categoria">
                     Categoría
@@ -104,7 +105,7 @@
             </div>
 
             <!-- FECHA -->
-            <div class="campo-formulario">
+            <div class="campo-formulario campo-fecha">
                 <label class="titulo-campo" for="fecha">Fecha</label>
                 <input class="input-formulario"
                        type="date"
@@ -142,7 +143,7 @@
                     </select>
                 </div>
 
-                <div class="campo-formulario">
+                <div class="campo-formulario campo-fecha">
                     <label class="titulo-campo" for="fecha-inicio">
                         Fecha de inicio
                     </label>
@@ -152,7 +153,7 @@
                            name="fecha_inicio">
                 </div>
 
-                <div class="campo-formulario">
+                <div class="campo-formulario campo-fecha">
                     <label class="titulo-campo" for="fecha-fin">
                         Fecha de finalización
                     </label>
@@ -161,22 +162,21 @@
                            id="fecha-fin"
                            name="fecha_fin">
                 </div>
-
-                <div class="campo-formulario">
-                    <label class="titulo-campo" for="excepciones">
+                <div class="campo-formulario campo-fecha">
+                    <label class="titulo-campo" for="fecha-fin">
                         Excepciones
                     </label>
-                    <textarea class="input-formulario"
-                              id="excepciones"
-                              name="excepciones"
-                              placeholder="Fechas en las que no se debe generar el movimiento"></textarea>
+                    <input class="input-formulario"
+                           type="date"
+                           id="fecha-fin"
+                           name="fecha_fin">
                 </div>
 
             </div>
 
         </div>
 
-        <button class="boton-enviar" type="submit">
+        <button id="boton-movimiento" type="submit">
             Guardar movimiento
         </button>
 

@@ -1,22 +1,39 @@
-
 function cambiarTipo(tipo) {
 
     const esIngreso = tipo === "ingreso";
+    const esGasto = tipo === "gasto";
+    const esTransferencia = tipo === "transferencia";
 
     document.getElementById("tipo").value = tipo;
 
+    // Pestañas activas
     document.getElementById("pestana-ingreso")
         .classList.toggle("activa", esIngreso);
 
     document.getElementById("pestana-gasto")
-        .classList.toggle("activa", !esIngreso);
+        .classList.toggle("activa", esGasto);
 
+    document.getElementById("pestana-transferencia")
+        .classList.toggle("activa", esTransferencia);
+
+    // Mostrar u ocultar campos
+    document.getElementById("campo-categoria").hidden = esTransferencia;
+    document.getElementById("campo-medio").hidden = esTransferencia;
+    document.getElementById("campo-destino").hidden = !esTransferencia;
+
+    // Cambiar etiquetas
     document.getElementById("titulo-fondo").textContent =
         esIngreso ? "Fondo de destino" : "Fondo de origen";
 
-    document.getElementById("titulo-medio").textContent =
-        esIngreso ? "Medio de ingreso" : "Medio de pago";
+    if (esIngreso) {
+        document.getElementById("titulo-medio").textContent =
+            "Medio de ingreso";
+    } else {
+        document.getElementById("titulo-medio").textContent =
+            "Medio de pago";
+    }
 
+    // Categorías
     const categoria = document.getElementById("categoria");
 
     if (esIngreso) {
@@ -49,6 +66,7 @@ function cambiarTipo(tipo) {
         `;
     }
 
+    // Medios
     const medio = document.getElementById("medio");
 
     if (esIngreso) {
@@ -69,11 +87,24 @@ function cambiarTipo(tipo) {
             <option value="tarjeta">Tarjeta</option>
         `;
     }
+
+    // La recurrencia no se aplica a las transferencias
+    if (esTransferencia) {
+        document.getElementById("es-recurrente").checked = false;
+        mostrarRecurrencia();
+    }
 }
+
 
 function mostrarRecurrencia() {
 
+    const recurrente = document.getElementById("es-recurrente").checked;
+
+    const datos = document.getElementById("datos-recurrencia");
+
+    datos.hidden = !recurrente;
+
     document.getElementById("frecuencia").required = recurrente;
     document.getElementById("fecha-inicio").required = recurrente;
-    document.getElementById("fecha-fin").required = recurrente;
+    document.getElementById("fecha-fin").required = false;
 }

@@ -52,7 +52,7 @@
                 </div>
             </div>
 
-            <div class="campo-formulario">
+            <div class="campo-formulario" id="campo-categoria">
                 <label class="titulo-campo" for="categoria">
                     Categoría
                 </label>
@@ -88,8 +88,20 @@
                 </select>
             </div>
 
+            <!-- FONDO DE DESTINO (solo transferencias) -->
+            <div class="campo-formulario" id="campo-destino" hidden>
+                <label class="titulo-campo" for="destino">Fondo de destino</label>
+                <select class="input-formulario" id="destino" name="destino">
+                    <option value="" disabled selected>Selecciona un fondo</option>
+                    <option value="efectivo">Efectivo</option>
+                    <option value="banco">Cuenta bancaria</option>
+                    <option value="billetera">Billetera virtual</option>
+                    <option value="otro">Otro</option>
+                </select>
+            </div>          
+
             <!-- MEDIO -->
-            <div class="campo-formulario">
+            <div class="campo-formulario" id="campo-medio">
                 <label class="titulo-campo" id="titulo-medio"
                        for="medio">
                     Medio de ingreso

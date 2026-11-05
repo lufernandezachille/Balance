@@ -110,3 +110,35 @@ function mostrarRecurrencia() {
     document.getElementById("fecha-inicio").required = recurrente;
     document.getElementById("fecha-fin").required = false;
 }
+
+const formulario = document.querySelector(".formulario");
+
+formulario.addEventListener("submit", function (evento) {
+    evento.preventDefault();
+
+    const movimiento = {
+        id: Date.now(),
+        tipo: document.getElementById("tipo").value,
+        moneda: document.getElementById("moneda").value,
+        importe: Number(document.getElementById("importe").value),
+        categoria: document.getElementById("categoria").value,
+        fondo: document.getElementById("fondo").value,
+        destino: document.getElementById("destino").value,
+        medio: document.getElementById("medio").value,
+        fecha: document.getElementById("fecha").value,
+        esRecurrente: document.getElementById("es-recurrente").checked,
+        frecuencia: document.getElementById("frecuencia").value,
+        fechaInicio: document.getElementById("fecha-inicio").value,
+        fechaFin: document.getElementById("fecha-fin").value,
+        excepciones: document.getElementById("excepciones").value
+    };
+
+    const movimientos = JSON.parse(localStorage.getItem("movimientos")) || [];
+    movimientos.push(movimiento);
+    localStorage.setItem("movimientos", JSON.stringify(movimientos));
+
+    formulario.reset();
+    cambiarTipo("ingreso");
+    mostrarRecurrencia();
+    alert("Movimiento guardado");
+});

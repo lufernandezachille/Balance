@@ -103,7 +103,9 @@ function mostrarRecurrencia() {
     const datos = document.getElementById("datos-recurrencia");
 
     datos.hidden = !recurrente;
-
+    document.getElementById("categoria").required = !esTransferencia;
+    document.getElementById("medio").required = !esTransferencia;
+    document.getElementById("destino").required = esTransferencia;
     document.getElementById("frecuencia").required = recurrente;
     document.getElementById("fecha-inicio").required = recurrente;
     document.getElementById("fecha-fin").required = false;

@@ -22,6 +22,205 @@
     </header>
     <hr class="separador-header">
 <main>
+    <h1 class="titulo-pagina">Patrimonio</h1>
+
+    <!-- PATRIMONIO TOTAL -->
+    <section class="tarjeta-patrimonio-total">
+
+        <p class="etiqueta-patrimonio">Patrimonio total</p>
+
+        <h2>$ 1.250.000</h2>
+
+        <p class="equivalente-patrimonio">
+            Equivalente en ARS
+        </p>
+
+    </section>
+
+
+    <!-- ACTUALIZACIÓN DE COTIZACIONES -->
+    <div class="actualizacion-cotizaciones">
+        <span>◷</span>
+        <p>Cotizaciones actualizadas: 17 oct. 2026 · 15:30</p>
+    </div>
+
+
+    <!-- DISTRIBUCIÓN POR MONEDA -->
+    <section class="tarjeta-distribucion">
+
+        <h2 class="titulo-seccion-patrimonio">
+            Distribución por moneda
+        </h2>
+
+        <!-- BARRA DE DISTRIBUCIÓN -->
+        <div class="barra-distribucion">
+
+            <div class="segmento ars"></div>
+            <div class="segmento usd"></div>
+            <div class="segmento otras"></div>
+
+        </div>
+
+        <!-- DETALLE DE MONEDAS -->
+        <div class="lista-monedas">
+
+            <div class="moneda-patrimonio">
+
+                <div class="identificacion-moneda">
+                    <span class="indicador-moneda ars"></span>
+                    <p>ARS</p>
+                </div>
+
+                <p class="porcentaje-moneda">45%</p>
+                <p class="saldo-moneda">$ 450.000</p>
+
+            </div>
+
+
+            <div class="moneda-patrimonio">
+
+                <div class="identificacion-moneda">
+                    <span class="indicador-moneda usd"></span>
+                    <p>USD</p>
+                </div>
+
+                <p class="porcentaje-moneda">35%</p>
+                <p class="saldo-moneda">USD 500</p>
+
+            </div>
+
+
+            <div class="moneda-patrimonio">
+
+                <div class="identificacion-moneda">
+                    <span class="indicador-moneda otras"></span>
+                    <p>Otras monedas</p>
+                </div>
+
+                <p class="porcentaje-moneda">20%</p>
+
+                <a href="#" class="consultar-saldo">
+                    Consultar saldo
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FONDOS -->
+    <section class="seccion-fondos">
+
+        <h2 class="titulo-seccion-patrimonio">
+            Tus fondos
+        </h2>
+
+        <div class="lista-fondos">
+
+            <!-- FONDO 1 -->
+            <article class="tarjeta-fondo">
+
+                <div class="icono-fondo">
+                    <span>▣</span>
+                </div>
+
+                <div class="informacion-fondo">
+                    <h3>Efectivo</h3>
+                    <p>Pesos argentinos</p>
+                </div>
+
+                <p class="saldo-fondo">$ 450.000</p>
+
+            </article>
+
+
+            <!-- FONDO 2 -->
+            <article class="tarjeta-fondo">
+
+                <div class="icono-fondo">
+                    <span>$</span>
+                </div>
+
+                <div class="informacion-fondo">
+                    <h3>Ahorros en dólares</h3>
+                    <p>USD</p>
+                </div>
+
+                <p class="saldo-fondo">USD 500</p>
+
+            </article>
+
+        </div>
+
+    </section>
+
+
+    <!-- EVOLUCIÓN DEL PATRIMONIO -->
+    <section class="tarjeta-evolucion">
+
+        <div class="encabezado-evolucion">
+
+            <h2 class="titulo-seccion-patrimonio">
+                Evolución del patrimonio
+            </h2>
+
+            <div class="periodos-evolucion">
+
+                <button type="button" class="periodo-evolucion">
+                    1M
+                </button>
+
+                <button type="button" class="periodo-evolucion">
+                    6M
+                </button>
+
+                <button type="button" class="periodo-evolucion activo">
+                    1A
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- GRÁFICO -->
+        <div class="grafico-patrimonio">
+
+            <svg viewBox="0 0 320 130" preserveAspectRatio="none">
+
+                <!-- Líneas de referencia -->
+                <line x1="0" y1="20" x2="320" y2="20"
+                    class="linea-referencia"/>
+
+                <line x1="0" y1="65" x2="320" y2="65"
+                    class="linea-referencia"/>
+
+                <line x1="0" y1="110" x2="320" y2="110"
+                    class="linea-referencia"/>
+
+                <!-- Área debajo de la línea -->
+                <polygon
+                    points="0,110 30,100 60,88 90,78 120,65 150,55 180,43 210,42 240,33 270,27 300,15 320,5 320,110"
+                    class="area-grafico"
+                />
+
+                <!-- Línea de evolución -->
+                <polyline
+                    points="0,110 30,100 60,88 90,78 120,65 150,55 180,43 210,42 240,33 270,27 300,15 320,5"
+                    class="linea-grafico"
+                />
+
+                <!-- Puntos -->
+                <circle cx="0" cy="110" r="3" class="punto-grafico"/>
+                <circle cx="60" cy="88" r="3" class="punto-grafico"/>
+                <circle cx="120" cy="65" r="3" class="punto-grafico"/>
+                <circle cx="180" cy="43" r="3" class="punto-grafico"/>
+                <circle cx="240" cy="33" r="3" class="punto-grafico"/>
+                <circle cx="300" cy="15" r="3" class="punto-grafico"/>
+            </svg>
+        </div>
+    </section>
 </main>
 <footer>
     <nav>

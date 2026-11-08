@@ -10,6 +10,10 @@
     --acento-sombra: #6785a0;
     --texto: #515a57;
     --sombra: #26453730;
+    --negativo-fondo: #f4e3d6;
+    --negativo: #d2603a;
+    --positivo-fondo: #d4e7db;
+    --positivo: #33a261;
 }
 
 html {
@@ -769,4 +773,263 @@ footer {
 .boton-cerrar-sesion:hover {
     background-color: var(--acento-sombra);
     color: var(--dominante-claro);
+}
+
+/* Movimientos*/
+.contenido-movimientos {
+    width: 100%;
+    padding: 20px 0 40px;
+}
+
+
+/* ENCABEZADO */
+
+.encabezado-movimientos {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 25px 25px;
+}
+
+.encabezado-movimientos .titulo-pagina {
+    margin: 0;
+}
+
+.subtitulo-movimientos {
+    color: var(--texto);
+    font-size: 15px;
+    margin: 5px 0 0;
+}
+
+.boton-agregar-movimiento {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 45px;
+    height: 45px;
+    background-color: var(--subordinado);
+    color: var(--dominante-claro);
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 30px;
+}
+
+
+/* RESUMEN */
+
+.resumen-movimientos {
+    display: flex;
+    gap: 12px;
+    width: 90%;
+    margin: 0 auto 20px;
+}
+
+.tarjeta-resumen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+    min-width: 0;
+    padding: 15px;
+    border-radius: 12px;
+}
+
+.tarjeta-resumen.ingresos {
+    background-color: var(--positivo-fondo);
+}
+
+.tarjeta-resumen.gastos {
+    background-color: var(--negativo-fondo);
+}
+
+.tarjeta-resumen p {
+    color: var(--texto);
+    font-size: 14px;
+    margin: 0 0 5px;
+}
+
+.tarjeta-resumen.ingresos h2 {
+    color: var(--positivo);
+    font-size: 21px;
+    margin: 0;
+    font-weight: 700;
+}
+
+
+.tarjeta-resumen.gastos h2 {
+    color: var(--negativo);
+    font-size: 21px;
+    margin: 0;
+    font-weight: 700;
+}
+
+
+/* BUSCADOR Y FILTRO */
+
+.busqueda-movimientos {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 90%;
+    margin: 20px auto 25px;
+}
+
+.contenedor-buscador {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    gap: 10px;
+    padding: 0 15px;
+    height: 45px;
+    background-color: var(--dominante-claro);
+    border: 1px solid var(--dominante-sombra);
+    border-radius: 25px;
+}
+
+.icono-busqueda {
+    color: var(--subordinado);
+    font-size: 27px;
+}
+
+.contenedor-buscador input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--texto);
+    font-family: "Urbanist", sans-serif;
+    font-size: 15px;
+}
+
+.contenedor-buscador input::placeholder {
+    color: var(--texto);
+    opacity: 0.7;
+}
+
+.boton-filtro {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 45px;
+    height: 45px;
+    flex-shrink: 0;
+    border: 1px solid var(--dominante-sombra);
+    border-radius: 50%;
+    background-color: var(--dominante-claro);
+    color: var(--subordinado);
+    font-size: 24px;
+    cursor: pointer;
+}
+
+
+/* HISTORIAL */
+
+.historial-movimientos {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.grupo-movimientos {
+    margin-bottom: 25px;
+}
+
+.fecha-movimientos {
+    color: var(--subordinado);
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0 0 12px 5px;
+}
+
+.lista-movimientos {
+    display: flex;
+    flex-direction: column;
+    padding: 0 12px;
+    background-color: var(--dominante-claro);
+    border-radius: 15px;
+}
+
+
+/* TARJETAS DE MOVIMIENTOS */
+
+.tarjeta-movimiento {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 75px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--dominante-sombra);
+}
+
+.tarjeta-movimiento:last-child {
+    border-bottom: none;
+}
+
+
+/* ICONOS */
+
+.icono-tipo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 43px;
+    height: 43px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    font-size: 21px;
+}
+
+.icono-tipo.ingreso {
+    background-color: var(--positivo-fondo);
+    color: var(--positivo);
+}
+
+.icono-tipo.gasto {
+    background-color: var(--negativo-fondo);
+    color: var(--negativo);
+}
+
+
+/* INFORMACIÓN */
+
+.informacion-movimiento {
+    flex: 1;
+    min-width: 0;
+}
+
+.informacion-movimiento h3 {
+    color: var(--subordinado);
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0 0 5px;
+}
+
+.informacion-movimiento p {
+    color: var(--texto);
+    font-size: 12px;
+    margin: 0;
+}
+
+
+/* MONTOS */
+
+.monto-movimiento {
+    font-size: 14px;
+    font-weight: 700;
+    white-space: nowrap;
+    margin: 0;
+}
+
+.monto-movimiento.ingreso {
+    color: var(--positivo);
+}
+
+.monto-movimiento.gasto {
+    color: var(--negativo);
+}
+
+
+/* OCULTAR MOVIMIENTOS FILTRADOS */
+
+.tarjeta-movimiento[hidden] {
+    display: none !important;
 }

@@ -22,6 +22,130 @@
     </header>
     <hr class="separador-header">
 <main>
+    <h1 class="titulo-pagina">Mi cuenta</h1>
+
+    <!-- DATOS DEL USUARIO -->
+    <section class="tarjeta-perfil">
+
+        <div class="foto-perfil">
+            <span>U</span>
+        </div>
+
+        <div class="informacion-perfil">
+            <h2>Usuario de Balance</h2>
+            <p>@usuario</p>
+        </div>
+
+    </section>
+
+
+    <!-- INFORMACIÓN PERSONAL -->
+    <section class="seccion-cuenta">
+
+        <div class="encabezado-seccion">
+            <h2>Información personal</h2>
+            <button type="button" class="boton-editar" id="boton-editar">
+                Editar perfil
+            </button>
+        </div>
+
+        <form class="formulario-cuenta" id="formulario-cuenta">
+
+            <div class="campo-cuenta">
+                <label for="nombre">Nombre</label>
+                <input
+                    type="text"
+                    id="nombre"
+                    name="nombre"
+                    value="Lucila"
+                    readonly
+                >
+            </div>
+
+            <div class="campo-cuenta">
+                <label for="apellido">Apellido</label>
+                <input
+                    type="text"
+                    id="apellido"
+                    name="apellido"
+                    value="Fernández"
+                    readonly
+                >
+            </div>
+
+            <div class="campo-cuenta">
+                <label for="usuario">Nombre de usuario</label>
+                <input
+                    type="text"
+                    id="usuario"
+                    name="usuario"
+                    value="usuario"
+                    readonly
+                >
+            </div>
+
+            <div class="campo-cuenta">
+                <label for="correo">Correo electrónico</label>
+                <input
+                    type="email"
+                    id="correo"
+                    name="correo"
+                    value="usuario@email.com"
+                    readonly
+                >
+            </div>
+
+            <div class="campo-cuenta">
+                <label for="moneda">Moneda predeterminada</label>
+                <select
+                    id="moneda"
+                    name="moneda"
+                    disabled
+                >
+                    <option value="ARS" selected>ARS - Peso argentino</option>
+                    <option value="USD">USD - Dólar estadounidense</option>
+                    <option value="EUR">EUR - Euro</option>
+                    <option value="MXN">MXN - Peso mexicano</option>
+                    <option value="CLP">CLP - Peso chileno</option>
+                    <option value="COP">COP - Peso colombiano</option>
+                </select>
+            </div>
+
+            <div class="botones-edicion" id="botones-edicion" hidden>
+                <button type="button" class="boton-cancelar" id="boton-cancelar">
+                    Cancelar
+                </button>
+
+                <button type="submit" class="boton-guardar">
+                    Guardar cambios
+                </button>
+            </div>
+
+        </form>
+
+    </section>
+
+
+    <!-- CONFIGURACIÓN -->
+    <section class="seccion-cuenta">
+
+        <h2>Configuración</h2>
+
+        <div class="opcion-configuracion">
+            <div>
+                <h3>Moneda predeterminada</h3>
+                <p>ARS - Peso argentino</p>
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- CERRAR SESIÓN -->
+    <button type="button" class="boton-cerrar-sesion">
+        Cerrar sesión
+    </button>
+
 </main>
 <footer>
     <nav>

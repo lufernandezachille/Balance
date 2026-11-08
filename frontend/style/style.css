@@ -589,36 +589,184 @@ footer {
     font-size: 13px;
 }
 
-.ver-metas {
-    display: block;
-    width: 90%;
-    margin: 25px auto 40px;
-    color: var(--subordinado);
-    font-size: 15px;
-    font-weight: 600;
-    text-decoration: none;
-}
-
-.mensaje-metas {
+/* Configuración */
+.tarjeta-perfil {
     display: flex;
     align-items: center;
     gap: 20px;
-    width: 90%;
-    min-height: 140px;
-    box-sizing: border-box;
-    margin: 0 auto;
+    width: 85%;
+    margin: 0 auto 30px;
     padding: 20px;
-    background-color: var(--dominante-sombra);
+    box-sizing: border-box;
+    background-color: var(--dominante-claro);
+    border: 1px solid var(--dominante-sombra);
     border-radius: 18px;
 }
 
-.icono-mensaje {
-    font-size: 55px;
+.foto-perfil {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 65px;
+    height: 65px;
+    flex-shrink: 0;
+    background-color: var(--dominante-sombra);
+    color: var(--subordinado);
+    border-radius: 50%;
+    font-size: 28px;
+    font-weight: bold;
 }
 
-.mensaje-metas p {
+.informacion-perfil h2 {
+    color: var(--subordinado);
+    font-size: 20px;
+    margin: 0 0 5px;
+}
+
+.informacion-perfil p {
+    color: var(--texto);
+    font-size: 15px;
+    margin: 0;
+}
+
+.seccion-cuenta {
+    width: 85%;
+    margin: 0 auto 30px;
+}
+
+.encabezado-seccion {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.seccion-cuenta h2 {
+    color: var(--subordinado);
+    font-size: 22px;
+    font-weight: 500;
+    margin: 0;
+}
+
+.boton-editar {
+    border: none;
+    background: transparent;
+    color: var(--acento-sombra);
+    font-family: "Urbanist", sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.formulario-cuenta {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 25px;
+    background-color: var(--dominante-claro);
+    border: 1px solid var(--dominante-sombra);
+    border-radius: 18px;
+}
+
+.campo-cuenta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.campo-cuenta label {
     color: var(--subordinado);
     font-size: 16px;
-    line-height: 1.5;
+    font-weight: 600;
+}
+
+.campo-cuenta input,
+.campo-cuenta select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 13px;
+    border: 2px solid var(--dominante-sombra);
+    border-radius: 10px;
+    background-color: var(--dominante-claro);
+    color: var(--texto);
+    font-family: "Urbanist", sans-serif;
+    font-size: 16px;
+}
+
+.campo-cuenta input:read-only,
+.campo-cuenta select:disabled {
+    background-color: var(--dominante-sombra);
+    cursor: default;
+    opacity: 1;
+}
+
+.botones-edicion {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.boton-cancelar,
+.boton-guardar {
+    width: 50%;
+    padding: 13px;
+    border-radius: 10px;
+    font-family: "Urbanist", sans-serif;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.boton-cancelar {
+    background-color: transparent;
+    color: var(--subordinado);
+    border: 2px solid var(--subordinado);
+}
+
+.boton-guardar {
+    background-color: var(--subordinado);
+    color: var(--dominante-claro);
+    border: 2px solid var(--subordinado);
+}
+
+.opcion-configuracion {
+    margin-top: 15px;
+    padding: 20px;
+    background-color: var(--dominante-claro);
+    border: 1px solid var(--dominante-sombra);
+    border-radius: 15px;
+}
+
+.opcion-configuracion h3 {
+    color: var(--subordinado);
+    font-size: 17px;
+    margin: 0 0 5px;
+}
+
+.opcion-configuracion p {
+    color: var(--texto);
+    font-size: 15px;
     margin: 0;
+}
+
+.boton-cerrar-sesion {
+    display: block;
+    width: 85%;
+    margin: 35px auto 0;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: transparent;
+    color: var(--acento-sombra);
+    border: 2px solid var(--acento-sombra);
+    border-radius: 10px;
+    font-family: "Urbanist", sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.boton-cerrar-sesion:hover {
+    background-color: var(--acento-sombra);
+    color: var(--dominante-claro);
 }

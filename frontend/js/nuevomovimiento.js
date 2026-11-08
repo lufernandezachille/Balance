@@ -1,3 +1,4 @@
+
 function cambiarTipo(tipo) {
 
     const esIngreso = tipo === "ingreso";
@@ -20,6 +21,13 @@ function cambiarTipo(tipo) {
     document.getElementById("campo-categoria").hidden = esTransferencia;
     document.getElementById("campo-medio").hidden = esTransferencia;
     document.getElementById("campo-destino").hidden = !esTransferencia;
+    document.getElementById("campo-recurrente").hidden = esTransferencia;
+
+    // Cambiar obligatoriedad de los campos
+    document.getElementById("categoria").required = !esTransferencia;
+    document.getElementById("medio").required = !esTransferencia;
+    document.getElementById("fondo").required = true;
+    document.getElementById("destino").required = esTransferencia;
 
     // Cambiar etiquetas
     document.getElementById("titulo-fondo").textContent =
@@ -108,3 +116,7 @@ function mostrarRecurrencia() {
     document.getElementById("fecha-inicio").required = recurrente;
     document.getElementById("fecha-fin").required = false;
 }
+
+
+// Estado inicial de la pantalla
+cambiarTipo("ingreso");

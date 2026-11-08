@@ -3,222 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Metas</title>
+    <title>Nuevo movimiento</title>
     <link rel="stylesheet" href="../style/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="icon" href="../img/logoapp.png" type="image/png">
 </head>
+
 <body>
     <header class="header">
         <div class="logo-header">
             <img src="../img/logoapp.png" alt="Logo de la aplicación" class="logo-app-header">
             <span class="logo-texto-header">Balance</span>
         </div>
+
         <a href="configuracion.html" class="micuenta-header" aria-label="Ir a Mi cuenta">
             <img src="../img/iconoperfil.png" alt="Foto de perfil" class="foto-perfil-header">
         </a>
     </header>
+    <hr class="separador-header">
+    <main>
+        <h1 class="titulo-pagina">Nuevo movimiento</h1>
+        <div class="pestanas-movimiento">
+            <button class="pestana-movimiento activa" type="button" id="pestana-ingreso" onclick="cambiarTipo('ingreso')">
+                Ingreso
+            </button>
+            <button class="pestana-movimiento" type="button" id="pestana-gasto" onclick="cambiarTipo('gasto')">
+                Gasto
+            </button>
 
-<main>
-    <h1 class="titulo-pagina">Nuevo movimiento</h1>
-    <div class="pestanas-movimiento">
-        <button class="pestana-movimiento activa" type="button" id="pestana-ingreso" onclick="cambiarTipo('ingreso')">
-            Ingreso
-        </button>
-        <button class="pestana-movimiento" type="button" id="pestana-gasto" onclick="cambiarTipo('gasto')">
-            Gasto
-        </button>
-        <button class="pestana-movimiento" type="button" id="pestana-transferencia" onclick="cambiarTipo('transferencia')">
-            Transferencia
-        </button>
-    </div>
-    <form class="formulario" action="#" method="POST">
-        <input type="hidden" id="tipo" name="tipo" value="ingreso">
-        <div class="contenedor-campos">
-            <div class="campo-formulario">
-                <label class="titulo-campo" for="importe">Monto</label>
-                <div class="contenedor-monto">
-                    <select class="input-formulario" id="moneda" name="moneda" required>
-                        <option value="ARS" selected>ARS</option>
-                        <option value="USD">USD</option>
-                        <option value="EUR">EUR</option>
-                        <option value="MXN">MXN</option>
-                        <option value="CLP">CLP</option>
-                        <option value="COP">COP</option>
-                    </select>
-                    <input class="input-formulario" type="number" id="importe" name="importe" placeholder="0,00" min="0.01" step="0.01" required>
-                </div>
-            </div>
-
-            <div class="campo-formulario">
-                <label class="titulo-campo" for="categoria">
-                    Categoría
-                </label>
-                <select class="input-formulario" id="categoria"
-                        name="categoria" required>
-                    <option value="" disabled selected>
-                        Selecciona una categoría
-                    </option>
-                    <option value="sueldo">Sueldo y trabajo</option>
-                    <option value="negocios">Negocios y ventas</option>
-                    <option value="regalos">Regalos y dinero recibido</option>
-                    <option value="inversiones">Inversiones</option>
-                    <option value="alquileres">Alquileres</option>
-                    <option value="otros">Otros ingresos</option>
-                </select>
-            </div>
-
-            <!-- FONDO -->
-            <div class="campo-formulario">
-                <label class="titulo-campo" id="titulo-fondo"
-                       for="fondo">
-                    Fondo de destino
-                </label>
-                <select class="input-formulario" id="fondo"
-                        name="fondo" required>
-                    <option value="" disabled selected>
-                        Selecciona un fondo
-                    </option>
-                    <option value="efectivo">Efectivo</option>
-                    <option value="banco">Cuenta bancaria</option>
-                    <option value="billetera">Billetera virtual</option>
-                    <option value="otro">Otro</option>
-                </select>
-            </div>
-
-            <!-- MEDIO -->
-            <div class="campo-formulario">
-                <label class="titulo-campo" id="titulo-medio"
-                       for="medio">
-                    Medio de ingreso
-                </label>
-                <select class="input-formulario" id="medio"
-                        name="medio" required>
-                    <option value="" disabled selected>
-                        Selecciona un medio
-                    </option>
-                    <option value="efectivo">Efectivo</option>
-                    <option value="transferencia">Transferencia</option>
-                </select>
-            </div>
-
-            <!-- FECHA -->
-            <div class="campo-formulario campo-fecha">
-                <label class="titulo-campo" for="fecha">Fecha</label>
-                <input class="input-formulario"
-                       type="date"
-                       id="fecha"
-                       name="fecha"
-                       required>
-            </div>
-
-            <!-- RECURRENCIA -->
-            <div class="campo-formulario">
-                <label class="titulo-campo">
-                    <input type="checkbox"
-                           id="es-recurrente"
-                           name="es_recurrente"
-                           value="1"
-                           onchange="mostrarRecurrencia()">
-                    Es un movimiento recurrente
-                </label>
-            </div>
-
-            <!-- DATOS DE RECURRENCIA -->
-            <div id="datos-recurrencia" hidden>
-
-                <div class="campo-formulario">
-                    <label class="titulo-campo" for="frecuencia">
-                        Frecuencia
-                    </label>
-                    <select class="input-formulario"
-                            id="frecuencia" name="frecuencia">
-                        <option value="">Selecciona una frecuencia</option>
-                        <option value="semanal">Semanal</option>
-                        <option value="quincenal">Quincenal</option>
-                        <option value="mensual">Mensual</option>
-                        <option value="anual">Anual</option>
-                    </select>
-                </div>
-
-                <div class="campo-formulario campo-fecha">
-                    <label class="titulo-campo" for="fecha-inicio">
-                        Fecha de inicio
-                    </label>
-                    <input class="input-formulario"
-                           type="date"
-                           id="fecha-inicio"
-                           name="fecha_inicio">
-                </div>
-
-                <div class="campo-formulario campo-fecha">
-                    <label class="titulo-campo" for="fecha-fin">
-                        Fecha de finalización
-                    </label>
-                    <input class="input-formulario"
-                           type="date"
-                           id="fecha-fin"
-                           name="fecha_fin">
-                </div>
-                <div class="campo-formulario campo-fecha">
-                    <label class="titulo-campo" for="fecha-fin">
-                        Excepciones
-                    </label>
-                    <input class="input-formulario"
-                           type="date"
-                           id="fecha-fin"
-                           name="fecha_fin">
-                </div>
-
-            </div>
-
+            <button class="pestana-movimiento" type="button" id="pestana-transferencia" onclick="cambiarTipo('transferencia')">
+                Transferencia
+            </button>
         </div>
 
-        <button id="boton-movimiento" type="submit">
-            Guardar movimiento
-        </button>
+        <form class="formulario" action="#" method="POST">
+            <input type="hidden" id="tipo" name="tipo" value="ingreso">
+            <div class="contenedor-campos">
+                <div class="campo-formulario">
+                    <label class="titulo-campo" for="importe">Monto</label>
+                    <div class="contenedor-monto">
+                        <select class="input-formulario" id="moneda" name="moneda" required>
+                            <option value="ARS" selected>ARS</option>
+                            <option value="USD">USD</option>
+                            <option value="EUR">EUR</option>
+                            <option value="MXN">MXN</option>
+                            <option value="CLP">CLP</option>
+                            <option value="COP">COP</option>
+                        </select>
+                        <input class="input-formulario" type="number" id="importe" name="importe" placeholder="0,00" min="0.01" step="0.01" required>
+                    </div>
+                </div>
 
-    </form>
+                <div class="campo-formulario" id="campo-categoria">
+                    <label class="titulo-campo" for="categoria">Categoría</label>
+                    <select class="input-formulario" id="categoria" name="categoria" required>
+                        <option value="" disabled selected>Selecciona una categoría</option>
+                        <option value="sueldo">Sueldo y trabajo</option>
+                        <option value="negocios">Negocios y ventas</option>
+                        <option value="regalos">Regalos y dinero recibido</option>
+                        <option value="inversiones">Inversiones</option>
+                        <option value="alquileres">Alquileres</option>
+                        <option value="otros">Otros ingresos</option>
+                    </select>
+                </div>
 
-</main>
+                <div class="campo-formulario" id="campo-fondo">
+                    <label class="titulo-campo" id="titulo-fondo" for="fondo">Fondo de destino</label>
+                    <select class="input-formulario" id="fondo" name="fondo" required>
+                        <option value="" disabled selected>Selecciona un fondo</option>
+                        <option value="efectivo">Efectivo</option>
+                        <option value="banco">Cuenta bancaria</option>
+                        <option value="billetera">Billetera virtual</option>
+                        <option value="otro">Otro</option>
+                    </select>
+                </div>
 
-<footer>
-    <nav>
-        <ul class="menu-footer">
-            <li class="boton-footer">
-                <a class="texto-footer" href="../index.html">
-                    <img class="icono-footer" src="../img/iconoinicio.png" alt="Inicio">
-                    <p>Inicio</p>
-                </a>
-            </li>
-            <li class="boton-footer">
-                <a class="texto-footer" href="movimientos.html">
-                    <img class="icono-footer" src="../img/iconomovimientos.png" alt="Movimientos">
-                    <p>Movimientos</p>
-                </a>
-            </li>
-            <li class="boton-nuevomovimiento-footer">
-                <a href="nuevomovimiento.html">
-                <img class="icono-nuevomovimiento-footer" src="../img/iconomas.png" alt="Nuevo movimiento">
-                </a>
-            </li>
-            <li class="boton-footer">
-                <a class="texto-footer" href="patrimonio.html">
-                    <img class="icono-footer" src="../img/iconopatrimonio.png" alt="Patrimonio">
-                    <p>Patrimonio</p>
-                </a>
-            </li>
-            <li class="boton-footer">
-                <a class="texto-footer" href="metas.html">
-                    <img class="icono-footer" src="../img/iconometas.png" alt="Metas">
-                    <p>Metas</p>
-                </a>
-            </li>
-        </ul>
-    </nav>
-</footer>
-<script src="../js/nuevomovimiento.js"></script>
+                <div class="campo-formulario" id="campo-destino" hidden>
+                    <label class="titulo-campo" for="destino">Fondo de destino</label>
+                    <select class="input-formulario" id="destino" name="destino">
+                        <option value="" disabled selected>Selecciona un fondo</option>
+                        <option value="efectivo">Efectivo</option>
+                        <option value="banco">Cuenta bancaria</option>
+                        <option value="billetera">Billetera virtual</option>
+                        <option value="otro">Otro</option>
+                    </select>
+                </div>
+
+                <div class="campo-formulario" id="campo-medio">
+                    <label class="titulo-campo" id="titulo-medio" for="medio">Medio de ingreso</label>
+                    <select class="input-formulario" id="medio" name="medio" required>
+                        <option value="" disabled selected>Selecciona un medio</option>
+                        <option value="efectivo">Efectivo</option>
+                        <option value="transferencia">Transferencia</option>
+                    </select>
+                </div>
+
+                <div class="campo-formulario" id="campo-fecha">
+                    <label class="titulo-campo" for="fecha">Fecha</label>
+                    <input class="input-formulario input-fecha" type="date" id="fecha" name="fecha" required>
+                </div>
+
+                <div class="campo-formulario" id="campo-recurrente">
+                    <label class="titulo-campo">
+                        <input type="checkbox" id="es-recurrente" name="es_recurrente" value="1" onchange="mostrarRecurrencia()">
+                        Es un movimiento recurrente
+                    </label>
+                </div>
+
+                <div id="datos-recurrencia" hidden>
+                    <div class="campo-formulario">
+                        <label class="titulo-campo" for="frecuencia">Frecuencia</label>
+                        <select class="input-formulario" id="frecuencia" name="frecuencia">
+                            <option value="">Selecciona una frecuencia</option>
+                            <option value="semanal">Semanal</option>
+                            <option value="quincenal">Quincenal</option>
+                            <option value="mensual">Mensual</option>
+                            <option value="anual">Anual</option>
+                        </select>
+                    </div>
+
+                    <div class="campo-formulario">
+                        <label class="titulo-campo" for="fecha-inicio">Fecha de inicio</label>
+                        <input class="input-formulario input-fecha" type="date" id="fecha-inicio" name="fecha_inicio">
+                    </div>
+
+                    <div class="campo-formulario">
+                        <label class="titulo-campo" for="fecha-fin">Fecha de finalización</label>
+                        <input class="input-formulario input-fecha" type="date" id="fecha-fin" name="fecha_fin">
+                    </div>
+
+                    <div class="campo-formulario">
+                        <label class="titulo-campo" for="fecha-excepcion">Excepciones</label>
+                        <input class="input-formulario input-fecha" type="date" id="fecha-excepcion" name="fecha_excepcion">
+                    </div>
+                </div>
+            </div>
+            <button id="boton-movimiento" type="submit">Guardar movimiento</button>
+        </form>
+    </main>
+    <footer>
+        <nav>
+            <ul class="menu-footer">
+                <li class="boton-footer">
+                    <a class="texto-footer" href="../index.html">
+                        <img class="icono-footer" src="../img/iconoinicio.png" alt="Inicio">
+                        <p>Inicio</p>
+                    </a>
+                </li>
+                <li class="boton-footer">
+                    <a class="texto-footer" href="movimientos.html">
+                        <img class="icono-footer" src="../img/iconomovimientos.png" alt="Movimientos">
+                        <p>Movimientos</p>
+                    </a>
+                </li>
+                <li class="boton-nuevomovimiento-footer">
+                    <a href="nuevomovimiento.html">
+                        <img class="icono-nuevomovimiento-footer" src="../img/iconomas.png" alt="Nuevo movimiento">
+                    </a>
+                </li>
+                <li class="boton-footer">
+                    <a class="texto-footer" href="patrimonio.html">
+                        <img class="icono-footer" src="../img/iconopatrimonio.png" alt="Patrimonio">
+                        <p>Patrimonio</p>
+                    </a>
+                </li>
+                <li class="boton-footer">
+                    <a class="texto-footer" href="metas.html">
+                        <img class="icono-footer" src="../img/iconometas.png" alt="Metas">
+                        <p>Metas</p>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </footer>
+    <script src="../js/nuevomovimiento.js"></script>
 </body>
 </html>

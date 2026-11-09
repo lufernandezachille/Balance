@@ -55,7 +55,6 @@ main {
     font-size: 16px;
     cursor: pointer;
     width: 60%;
-    margin-bottom: 20px;
 }
 
 .boton-1:hover {
@@ -86,6 +85,13 @@ main {
 }
 
 /* Cuenta */
+.contenedor-cuenta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
 #balance-cuenta {
     color: var(--subordinado);
     font-size: 65px;
@@ -96,7 +102,7 @@ main {
 }
 
 #logo-cuenta {
-    margin-top: 50px;
+    margin-top: 30px;
     width: 150px;
     height: auto;
     margin-bottom: 0px;
@@ -105,7 +111,7 @@ main {
 #slogan {
     color: var(--texto);
     font-size: 25px;
-    margin-top: 80px;
+    margin-top: 50px;
     text-align: center;
     width: 70%;
 }

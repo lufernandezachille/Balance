@@ -13,11 +13,19 @@
 <body>
 <main>
     <h1 class="titulo-formulario">Crear Cuenta</h1>
-        <form class="formulario" action="#" method="POST">
+        <form id="formulario-registro">
         <div class="contenedor-campos">
         <div class="campo-formulario">
-            <label class="titulo-campo" for="nombre">Nombre completo</label>
-            <input class="input-formulario" type="text" id="nombre" name="nombre" placeholder="Ingresa tu nombre completo" required>
+            <label class="titulo-campo" for="nombre">Nombre</label>
+            <input class="input-formulario" type="text" id="nombre" name="nombre" placeholder="Ingresa tu nombre" required>
+        </div>
+        <div class="campo-formulario">
+            <label class="titulo-campo" for="apellido">Apellido</label>
+            <input class="input-formulario" type="text" id="apellido" name="apellido" placeholder="Ingresa tu apellido" required>
+        </div>
+        <div class="campo-formulario">
+            <label class="titulo-campo" for="usuario">Nombre de usuario</label>
+            <input class="input-formulario" type="text" id="usuario" name="usuario" placeholder="Elegí un nombre de usuario" required>
         </div>
         <div class="campo-formulario">
             <label class="titulo-campo" for="correo">Correo electrónico</label>
@@ -49,5 +57,6 @@
         <a class="texto-cuenta" href="../htmls/iniciarsesion.html">Ya tengo cuenta</a>
         </form>
 </main>
+<script src="../js/cuenta.js"></script>
 </body>
 </html>

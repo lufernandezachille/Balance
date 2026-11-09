@@ -27,31 +27,11 @@
         <a href="nuevameta.html" class="boton-agregar">+</a>
     </div>
 
-    <section class="lista-metas">
-        <article class="tarjeta-meta">
-            <div class="encabezado-meta">
-                <div class="icono-meta">
-                    <span>✈</span>
-                </div>
-                <div class="informacion-meta">
-                    <h2>Viaje a Europa</h2>
-                    <p>Fecha objetivo: dic. 2027</p>
-                </div>
-                <button class="opciones-meta" type="button">···</button>
-            </div>
-            <div class="montos-meta">
-                <p class="monto-ahorrado">$ 600.000</p>
-                <p class="monto-objetivo">de $ 2.000.000</p>
-            </div>
-            <div class="barra-progreso">
-                <div class="progreso" style="width: 30%;"></div>
-            </div>
-            <div class="detalle-progreso">
-                <span>30% completado</span>
-                <span>Faltan $ 1.400.000</span>
-            </div>
-        </article>
+    <section class="lista-metas" id="lista-metas">
     </section>
+    <p id="mensaje-vacio" hidden>
+        Todavía no creaste ninguna meta.
+    </p>
 </main>
 <footer>
     <nav>
@@ -88,5 +68,6 @@
         </ul>
     </nav>
 </footer>
+<script src="../js/metas.js"></script>
 </body>
 </html>

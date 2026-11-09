@@ -1613,3 +1613,17 @@ footer {
 .referencia.gasto {
     background-color: var(--negativo);
 }
+
+.icono-tipo.transferencia {
+    background-color: var(--dominante-sombra);
+    color: var(--acento-sombra);
+}
+
+.monto-movimiento.transferencia {
+    color: var(--acento-sombra);
+}
+
+#mensaje-vacio {
+    text-align: center;
+    margin-top: 40px;
+}

@@ -120,3 +120,36 @@ function mostrarRecurrencia() {
 
 // Estado inicial de la pantalla
 cambiarTipo("ingreso");
+
+// Guardar el movimiento
+const formulario = document.querySelector(".formulario");
+
+formulario.addEventListener("submit", function (evento) {
+    evento.preventDefault();
+
+    const tipo = document.getElementById("tipo").value;
+    const esTransferencia = tipo === "transferencia";
+
+    const movimiento = {
+        id: Date.now(),
+        tipo: tipo,
+        moneda: document.getElementById("moneda").value,
+        importe: Number(document.getElementById("importe").value),
+        categoria: esTransferencia ? "" : document.getElementById("categoria").value,
+        fondo: document.getElementById("fondo").value,
+        destino: esTransferencia ? document.getElementById("destino").value : "",
+        medio: esTransferencia ? "" : document.getElementById("medio").value,
+        fecha: document.getElementById("fecha").value,
+        esRecurrente: document.getElementById("es-recurrente").checked,
+        frecuencia: document.getElementById("frecuencia").value,
+        fechaInicio: document.getElementById("fecha-inicio").value,
+        fechaFin: document.getElementById("fecha-fin").value,
+        fechaExcepcion: document.getElementById("fecha-excepcion").value
+    };
+
+    const movimientos = JSON.parse(localStorage.getItem("movimientos")) || [];
+    movimientos.push(movimiento);
+    localStorage.setItem("movimientos", JSON.stringify(movimientos));
+
+    window.location.href = "movimientos.html";
+});

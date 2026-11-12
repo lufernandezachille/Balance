@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planes de Balance</title>
+    <link rel="stylesheet" href="../style/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="icon" href="../img/logoapp.png" type="image/png">
+</head>
+<body>
+    <header class="header">
+        <div class="logo-header">
+            <img src="../img/logoapp.png" alt="Logo de la aplicación" class="logo-app-header">
+            <span class="logo-texto-header">Balance</span>
+        </div>
+        <a href="configuracion.html" class="micuenta-header" aria-label="Ir a Mi cuenta">
+            <img src="../img/iconoperfil.png" alt="Foto de perfil" class="foto-perfil-header">
+        </a>
+    </header>
+    <hr class="separador-header">
+
+<main>
+    <h1 class="titulo-pagina">Planes</h1>
+    <div class="contenedor-planes">
+        <div class="tarjeta-plan">
+            <h2 class="titulo-plan">Versión Gratuita</h2>
+            <p class="subtitulo-plan">Funciones principales de organización financiera.</p>
+            
+            <ul class="lista-beneficios">
+                <li>Historial de los últimos 3 meses</li>
+                <li>Hasta 3 metas de ahorro</li>
+                <li>Hasta 3 movimientos recurrentes</li>
+            </ul>
+
+            <button type="button" class="boton-plan" id="btn-seleccionar-gratis">
+                Seleccionar Gratuito
+            </button>
+        </div>
+
+        <!-- PLAN PREMIUM -->
+        <div class="tarjeta-plan destacada">
+            <h2 class="titulo-plan">Versión Premium</h2>
+            <p class="subtitulo-plan">Más herramientas, menos límites.</p>
+            
+            <ul class="lista-beneficios">
+                <li>Historial completo</li>
+                <li>Metas de ahorro ilimitadas</li>
+                <li>Movimientos recurrentes ilimitados</li>
+            </ul>
+
+            <button type="button" class="boton-plan boton-premium" id="btn-seleccionar-premium">
+                Obtener Premium
+            </button>
+        </div>
+    </div>
+</main>
+<footer>
+    <nav>
+        <ul class="menu-footer">
+            <li class="boton-footer">
+                <a class="texto-footer" href="../index.html">
+                    <img class="icono-footer" src="../img/iconoinicio.png" alt="Inicio">
+                    <p>Inicio</p>
+                </a>
+            </li>
+            <li class="boton-footer">
+                <a class="texto-footer" href="movimientos.html">
+                    <img class="icono-footer" src="../img/iconomovimientos.png" alt="Movimientos">
+                    <p>Movimientos</p>
+                </a>
+            </li>
+            <li class="boton-nuevomovimiento-footer">
+                <a href="nuevomovimiento.html">
+                    <img class="icono-nuevomovimiento-footer" src="../img/iconomas.png" alt="Nuevo movimiento">
+                </a>
+            </li>
+            <li class="boton-footer">
+                <a class="texto-footer" href="patrimonio.html">
+                    <img class="icono-footer" src="../img/iconopatrimonio.png" alt="Patrimonio">
+                    <p>Patrimonio</p>
+                </a>
+            </li>
+            <li class="boton-footer">
+                <a class="texto-footer" href="metas.html">
+                    <img class="icono-footer" src="../img/iconometas.png" alt="Metas">
+                    <p>Metas</p>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</footer>
+<script src="../js/planes.js"></script>
+</body>
+</html>

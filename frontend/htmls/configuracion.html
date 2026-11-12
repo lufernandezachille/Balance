@@ -21,88 +21,78 @@
         </a>
     </header>
     <hr class="separador-header">
+
 <main>
     <h1 class="titulo-pagina">Mi cuenta</h1>
 
-    <!-- DATOS DEL USUARIO -->
+    <!-- DATOS DEL USUARIO Y BADGE DE PLAN -->
     <section class="tarjeta-perfil">
-
         <div class="foto-perfil">
             <span>U</span>
         </div>
-
         <div class="informacion-perfil">
-            <h2 id="nombre-perfil">Usuario de Balance</h2>
+            <h2 id="nombre-perfil">Cargando...</h2>
             <p id="usuario-perfil">@usuario</p>
+            <span id="badge-plan" class="badge-plan">Plan Gratuito</span>
         </div>
-
     </section>
 
-
-    <!-- INFORMACIÓN PERSONAL -->
+    <!-- INFORMACIÓN PERSONAL (FORMULARIO GENERAL) -->
     <section class="seccion-cuenta">
-
         <div class="encabezado-seccion">
             <h2>Información personal</h2>
-            <button type="button" class="boton-editar" id="boton-editar">
-                Editar perfil
+            <button type="button" class="boton-secundario" id="boton-activar-edicion">
+                Editar información
             </button>
         </div>
 
-        <form class="formulario-cuenta" id="formulario-cuenta">
+        <!-- VISTA DE SOLO LECTURA (Visible por defecto) -->
+        <div id="vista-informacion" class="datos-cuenta">
+            <div class="campo-vista">
+                <span class="etiqueta">Nombre completo</span>
+                <p id="vista-nombre-completo">-</p>
+            </div>
+            <div class="campo-vista">
+                <span class="etiqueta">Nombre de usuario</span>
+                <p id="vista-usuario">-</p>
+            </div>
+            <div class="campo-vista">
+                <span class="etiqueta">Correo electrónico</span>
+                <p id="vista-correo">-</p>
+            </div>
+            <div class="campo-vista">
+                <span class="etiqueta">Moneda predeterminada</span>
+                <p id="vista-moneda">-</p>
+            </div>
+        </div>
+
+        <!-- FORMULARIO DE EDICIÓN (Oculto por defecto) -->
+        <form class="formulario-cuenta" id="formulario-cuenta" hidden>
 
             <div class="campo-cuenta">
                 <label for="nombre">Nombre</label>
-                <input
-                    type="text"
-                    id="nombre"
-                    name="nombre"
-                    value="Lucila"
-                    readonly
-                >
+                <input type="text" id="nombre" name="nombre" required>
             </div>
 
             <div class="campo-cuenta">
                 <label for="apellido">Apellido</label>
-                <input
-                    type="text"
-                    id="apellido"
-                    name="apellido"
-                    value="Fernández"
-                    readonly
-                >
+                <input type="text" id="apellido" name="apellido" required>
             </div>
 
             <div class="campo-cuenta">
                 <label for="usuario">Nombre de usuario</label>
-                <input
-                    type="text"
-                    id="usuario"
-                    name="usuario"
-                    value="usuario"
-                    readonly
-                >
+                <input type="text" id="usuario" name="usuario" required>
             </div>
 
             <div class="campo-cuenta">
                 <label for="correo">Correo electrónico</label>
-                <input
-                    type="email"
-                    id="correo"
-                    name="correo"
-                    value="usuario@email.com"
-                    readonly
-                >
+                <input type="email" id="correo" name="correo" required>
             </div>
 
             <div class="campo-cuenta">
                 <label for="moneda">Moneda predeterminada</label>
-                <select
-                    id="moneda"
-                    name="moneda"
-                    disabled
-                >
-                    <option value="ARS" selected>ARS - Peso argentino</option>
+                <select id="moneda" name="moneda">
+                    <option value="ARS">ARS - Peso argentino</option>
                     <option value="USD">USD - Dólar estadounidense</option>
                     <option value="EUR">EUR - Euro</option>
                     <option value="MXN">MXN - Peso mexicano</option>
@@ -111,42 +101,39 @@
                 </select>
             </div>
 
-            <div class="botones-edicion" id="botones-edicion" hidden>
-                <button type="button" class="boton-cancelar" id="boton-cancelar">
+            <div class="botones-edicion">
+                <button type="button" class="boton-cancelar" id="boton-cancelar-edicion">
                     Cancelar
                 </button>
-
                 <button type="submit" class="boton-guardar">
                     Guardar cambios
                 </button>
             </div>
 
         </form>
-
     </section>
 
-
-    <!-- CONFIGURACIÓN -->
     <section class="seccion-cuenta">
+        <h2>Suscripción y Plan</h2>
+        <div class="detalle-plan">
+            <p>Tu plan actual es: <strong id="texto-plan-actual">Gratuito</strong></p>
 
-        <h2>Configuración</h2>
+            <button type="button" id="boton-obtener-premium" class="boton-secundario">
+                <a href="planpremium.html">Obtener Premium</a>
+            </button>
 
-        <div class="opcion-configuracion">
-            <div>
-                <h3>Moneda predeterminada</h3>
-                <p>ARS - Peso argentino</p>
-            </div>
+            <button type="button" id="boton-cancelar-premium" class="boton-peligro" hidden>
+                Cancelar suscripción
+            </button>
         </div>
-
     </section>
-
 
     <!-- CERRAR SESIÓN -->
     <button type="button" class="boton-cerrar-sesion" id="boton-cerrar-sesion">
         Cerrar sesión
     </button>
-
 </main>
+
 <footer>
     <nav>
         <ul class="menu-footer">
@@ -164,7 +151,7 @@
             </li>
             <li class="boton-nuevomovimiento-footer">
                 <a href="nuevomovimiento.html">
-                <img class="icono-nuevomovimiento-footer" src="../img/iconomas.png" alt="Nuevo movimiento">
+                    <img class="icono-nuevomovimiento-footer" src="../img/iconomas.png" alt="Nuevo movimiento">
                 </a>
             </li>
             <li class="boton-footer">
@@ -182,6 +169,7 @@
         </ul>
     </nav>
 </footer>
+
 <script src="../js/cuenta.js"></script>
 </body>
 </html>

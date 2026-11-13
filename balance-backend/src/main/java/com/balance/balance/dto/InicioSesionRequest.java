@@ -1,0 +1,26 @@
+package com.balance.balance.dto;
+
+public class InicioSesionRequest {
+
+    private String correo;
+    private String contrasena;
+
+    public InicioSesionRequest() {
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public String getContrasena() {
+        return contrasena;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
+    }
+}

@@ -20,6 +20,12 @@ public class Usuario {
     @Column(nullable = false)
     private String nombre;
 
+    @Column(nullable = false)
+    private String apellido;
+
+    @Column(name = "nombre_usuario", unique = true, nullable = false)
+    private String nombreUsuario;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "moneda_predeterminada_id", nullable = false)
     private Moneda monedaPredeterminada;
@@ -88,5 +94,21 @@ public class Usuario {
 
     public LocalDateTime getFechaCreacion() {
         return fechaCreacion;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
+
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
     }
 }

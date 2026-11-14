@@ -23,8 +23,13 @@ public class UsuarioService {
 
 
     public Usuario registrarUsuario(Usuario usuario, String codigoMoneda) {
+
         if (usuarioRepository.existsByCorreo(usuario.getCorreo())) {
             throw new RuntimeException("El correo ya está registrado");
+        }
+
+        if (usuarioRepository.existsByNombreUsuario(usuario.getNombreUsuario())) {
+            throw new RuntimeException("El nombre de usuario ya está en uso");
         }
 
         Moneda moneda = monedaRepository.findByCodigo(codigoMoneda)
@@ -46,5 +51,10 @@ public class UsuarioService {
         }
 
         return usuario;
+    }
+
+    public Usuario buscarPorCorreo(String correo) {
+        return usuarioRepository.findByCorreo(correo)
+                .orElseThrow(() -> new RuntimeException("El usuario no existe"));
     }
 }

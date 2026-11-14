@@ -1,18 +1,22 @@
-
 package com.balance.balance.dto;
 
 public class UsuarioRespuesta {
 
     private Long id;
     private String nombre;
+    private String apellido;
+    private String nombreUsuario;
     private String correo;
     private String codigoMoneda;
     private String token;
 
-    public UsuarioRespuesta(Long id, String nombre, String correo,
+    public UsuarioRespuesta(Long id, String nombre, String apellido,
+                            String nombreUsuario, String correo,
                             String codigoMoneda, String token) {
         this.id = id;
         this.nombre = nombre;
+        this.apellido = apellido;
+        this.nombreUsuario = nombreUsuario;
         this.correo = correo;
         this.codigoMoneda = codigoMoneda;
         this.token = token;
@@ -24,6 +28,14 @@ public class UsuarioRespuesta {
 
     public String getNombre() {
         return nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public String getNombreUsuario() {
+        return nombreUsuario;
     }
 
     public String getCorreo() {

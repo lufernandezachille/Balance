@@ -1,7 +1,8 @@
 // URL base de la API (Backend)
-const API_URL = "http://localhost:3000/api"; 
+const API_URL = "http://localhost:8080/api"; 
 
 // ---------- 1. REGISTRO (CREAR CUENTA) ----------
+
 const formularioRegistro = document.getElementById("formulario-registro");
 
 if (formularioRegistro) {
@@ -11,22 +12,25 @@ if (formularioRegistro) {
         const datosRegistro = {
             nombre: document.getElementById("nombre").value.trim(),
             apellido: document.getElementById("apellido").value.trim(),
-            usuario: document.getElementById("usuario").value.trim(),
+            nombreUsuario: document.getElementById("usuario").value.trim(),
             correo: document.getElementById("correo").value.trim().toLowerCase(),
             contrasena: document.getElementById("contrasena").value,
-            moneda: document.getElementById("moneda").value
+            codigoMoneda: document.getElementById("moneda").value
         };
 
         const confirmar = document.getElementById("confirmar-contrasena").value;
+
         if (datosRegistro.contrasena !== confirmar) {
             alert("Las contraseñas no coinciden.");
             return;
         }
 
         try {
-            const respuesta = await fetch(`${API_URL}/auth/registro`, {
+            const respuesta = await fetch(`${API_URL}/usuarios/registro`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json"
+                },
                 body: JSON.stringify(datosRegistro)
             });
 
@@ -59,7 +63,7 @@ if (formularioLogin) {
         };
 
         try {
-            const respuesta = await fetch(`${API_URL}/auth/login`, {
+            const respuesta = await fetch(`${API_URL}/usuarios/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(credenciales)
@@ -125,31 +129,35 @@ if (formularioCuenta) {
         }
 
         try {
-            const respuesta = await fetch(`${API_URL}/perfil`, {
+            const respuesta = await fetch(`${API_URL}/usuarios/perfil`, {
                 method: "GET",
-                headers: { "Authorization": `Bearer ${token}` }
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
             });
 
-            if (!respuesta.ok) throw new Error("Sesión expirada o inválida.");
+            if (!respuesta.ok) {
+                throw new Error("Sesión expirada o inválida.");
+            }
 
             const usuario = await respuesta.json();
 
-            // Rellenar campos del formulario
             document.getElementById("nombre").value = usuario.nombre || "";
             document.getElementById("apellido").value = usuario.apellido || "";
-            document.getElementById("usuario").value = usuario.usuario || "";
+            document.getElementById("usuario").value = usuario.nombreUsuario || "";
             document.getElementById("correo").value = usuario.correo || "";
-            document.getElementById("moneda").value = usuario.moneda || "ARS";
-            
-            // Actualizar encabezado del perfil
+            document.getElementById("moneda").value = usuario.codigoMoneda || "ARS";
+
             const nombrePerfil = document.getElementById("nombre-perfil");
             const usuarioPerfil = document.getElementById("usuario-perfil");
-            
-            if (nombrePerfil) nombrePerfil.textContent = `${usuario.nombre} ${usuario.apellido}`;
-            if (usuarioPerfil) usuarioPerfil.textContent = `@${usuario.usuario}`;
-            
-            // Actualizar interfaz del Plan
-            actualizarInterfazPlan(usuario.plan || "Gratuito");
+
+            if (nombrePerfil) {
+                nombrePerfil.textContent = `${usuario.nombre} ${usuario.apellido}`;
+            }
+
+            if (usuarioPerfil) {
+                usuarioPerfil.textContent = `@${usuario.nombreUsuario}`;
+            }
 
         } catch (error) {
             alert(error.message);
@@ -158,7 +166,6 @@ if (formularioCuenta) {
         }
     }
 
-    // Enviar cambios del formulario al Backend
     formularioCuenta.addEventListener("submit", async function(event) {
         event.preventDefault();
         const token = localStorage.getItem("authToken");
@@ -195,7 +202,6 @@ if (formularioCuenta) {
         }
     });
 
-    // Ejecutar carga al entrar
     cargarPerfil();
 }
 

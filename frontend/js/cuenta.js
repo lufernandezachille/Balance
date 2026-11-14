@@ -1,5 +1,7 @@
+
 // URL base de la API (Backend)
-const API_URL = "http://localhost:8080/api"; 
+const API_URL = "http://localhost:8080/api";
+
 
 // ---------- 1. REGISTRO (CREAR CUENTA) ----------
 
@@ -51,6 +53,7 @@ if (formularioRegistro) {
 
 
 // ---------- 2. INICIAR SESIÓN ----------
+
 const formularioLogin = document.getElementById("formulario-login");
 
 if (formularioLogin) {
@@ -65,7 +68,9 @@ if (formularioLogin) {
         try {
             const respuesta = await fetch(`${API_URL}/usuarios/login`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json"
+                },
                 body: JSON.stringify(credenciales)
             });
 
@@ -75,7 +80,6 @@ if (formularioLogin) {
                 throw new Error(resultado.mensaje || "Credenciales incorrectas.");
             }
 
-            // Guardar Token JWT devuelto por el Backend
             localStorage.setItem("authToken", resultado.token);
 
             alert("¡Bienvenido/a a Balance!");
@@ -89,6 +93,7 @@ if (formularioLogin) {
 
 
 // ---------- 3. AUXILIAR: ACTUALIZAR INTERFAZ DEL PLAN ----------
+
 function actualizarInterfazPlan(planActual) {
     const textoPlan = document.getElementById("texto-plan-actual");
     const badgePlan = document.getElementById("badge-plan");
@@ -114,11 +119,14 @@ function actualizarInterfazPlan(planActual) {
 
 
 // ---------- 4. CARGAR Y GUARDAR PERFIL ----------
+
 const formularioCuenta = document.getElementById("formulario-cuenta");
 
 if (formularioCuenta) {
-    
-    // Cargar datos desde el Backend al entrar a la pantalla
+
+    const vistaInformacion = document.getElementById("vista-informacion");
+
+    // Cargar datos del usuario desde el Backend
     async function cargarPerfil() {
         const token = localStorage.getItem("authToken");
 
@@ -142,12 +150,14 @@ if (formularioCuenta) {
 
             const usuario = await respuesta.json();
 
+            // Completar formulario
             document.getElementById("nombre").value = usuario.nombre || "";
             document.getElementById("apellido").value = usuario.apellido || "";
             document.getElementById("usuario").value = usuario.nombreUsuario || "";
             document.getElementById("correo").value = usuario.correo || "";
             document.getElementById("moneda").value = usuario.codigoMoneda || "ARS";
 
+            // Actualizar encabezado
             const nombrePerfil = document.getElementById("nombre-perfil");
             const usuarioPerfil = document.getElementById("usuario-perfil");
 
@@ -159,6 +169,19 @@ if (formularioCuenta) {
                 usuarioPerfil.textContent = `@${usuario.nombreUsuario}`;
             }
 
+            // Actualizar vista de solo lectura
+            document.getElementById("vista-nombre-completo").textContent =
+                `${usuario.nombre} ${usuario.apellido}`;
+
+            document.getElementById("vista-usuario").textContent =
+                `@${usuario.nombreUsuario}`;
+
+            document.getElementById("vista-correo").textContent =
+                usuario.correo;
+
+            document.getElementById("vista-moneda").textContent =
+                usuario.codigoMoneda;
+
         } catch (error) {
             alert(error.message);
             localStorage.removeItem("authToken");
@@ -166,20 +189,57 @@ if (formularioCuenta) {
         }
     }
 
+    // Cargar suscripción actual desde el Backend
+    async function cargarSuscripcion() {
+
+        const token = localStorage.getItem("authToken");
+
+        try {
+
+            const respuesta = await fetch(`${API_URL}/usuarios/suscripcion`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
+            if (!respuesta.ok) {
+                throw new Error("No se pudo obtener la suscripción.");
+            }
+
+            const suscripcion = await respuesta.json();
+
+            const nombrePlan = suscripcion.nombrePlan;
+
+            if (nombrePlan === "PREMIUM") {
+                actualizarInterfazPlan("Premium");
+            } else {
+                actualizarInterfazPlan("Gratis");
+            }
+
+        } catch (error) {
+
+            console.error("Error al cargar la suscripción:", error);
+
+        }
+    }
+
+    // Guardar cambios del perfil
     formularioCuenta.addEventListener("submit", async function(event) {
         event.preventDefault();
+
         const token = localStorage.getItem("authToken");
 
         const datosActualizados = {
             nombre: document.getElementById("nombre").value.trim(),
             apellido: document.getElementById("apellido").value.trim(),
-            usuario: document.getElementById("usuario").value.trim(),
+            nombreUsuario: document.getElementById("usuario").value.trim(),
             correo: document.getElementById("correo").value.trim().toLowerCase(),
-            moneda: document.getElementById("moneda").value
+            codigoMoneda: document.getElementById("moneda").value
         };
 
         try {
-            const respuesta = await fetch(`${API_URL}/perfil`, {
+            const respuesta = await fetch(`${API_URL}/usuarios/perfil`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -195,65 +255,89 @@ if (formularioCuenta) {
             }
 
             alert("¡Tus datos se actualizaron correctamente!");
-            cargarPerfil();
+
+            await cargarPerfil();
+
+            formularioCuenta.hidden = true;
+            vistaInformacion.hidden = false;
 
         } catch (error) {
             alert(error.message);
         }
     });
 
+
+    // Activar edición
+    const botonActivarEdicion = document.getElementById("boton-activar-edicion");
+
+    if (botonActivarEdicion) {
+        botonActivarEdicion.addEventListener("click", () => {
+            vistaInformacion.hidden = true;
+            formularioCuenta.hidden = false;
+        });
+    }
+
+
+    // Cancelar edición
+    const botonCancelarEdicion = document.getElementById("boton-cancelar-edicion");
+
+    if (botonCancelarEdicion) {
+        botonCancelarEdicion.addEventListener("click", async () => {
+            await cargarPerfil();
+
+            formularioCuenta.hidden = true;
+            vistaInformacion.hidden = false;
+        });
+    }
+
+    // Cargar perfil y suscripción al entrar
     cargarPerfil();
+    cargarSuscripcion();
 }
 
 
 // ---------- 5. ACCIONES DE BOTONES DE SUSCRIPCIÓN ----------
-const btnObtener = document.getElementById("boton-obtener-premium");
-const btnCancelar = document.getElementById("boton-cancelar-premium");
 
-// Redirección a la pantalla de compra Premium
+const btnObtener = document.getElementById("boton-obtener-premium");
+
 if (btnObtener) {
     btnObtener.addEventListener("click", () => {
         window.location.href = "planpremium.html";
     });
 }
 
-// Acción para cancelar suscripción y volver al plan Gratuito
-if (btnCancelar) {
-    btnCancelar.addEventListener("click", async () => {
-        if (confirm("¿Estás seguro/a de que querés cancelar tu suscripción Premium?")) {
+
+// ---------- 6. CERRAR SESIÓN ----------
+
+const botonCerrarSesion = document.getElementById("boton-cerrar-sesion");
+
+if (botonCerrarSesion) {
+    botonCerrarSesion.addEventListener("click", async function() {
+
+        if (confirm("¿Estás seguro de que querés cerrar sesión?")) {
+
             const token = localStorage.getItem("authToken");
 
             try {
-                const respuesta = await fetch(`${API_URL}/perfil/plan`, {
-                    method: "PUT",
+                const respuesta = await fetch(`${API_URL}/usuarios/logout`, {
+                    method: "POST",
                     headers: {
-                        "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
-                    },
-                    body: JSON.stringify({ plan: "Gratuito" })
+                    }
                 });
 
-                if (!respuesta.ok) throw new Error("No se pudo actualizar el plan.");
-
-                alert("Has vuelto al plan Gratuito.");
-                actualizarInterfazPlan("Gratuito");
+                if (!respuesta.ok) {
+                    throw new Error("No se pudo cerrar la sesión en el servidor.");
+                }
 
             } catch (error) {
                 alert(error.message);
+
+            } finally {
+                localStorage.removeItem("authToken");
+                window.location.href = "iniciarsesion.html";
             }
         }
     });
 }
 
-
-// ---------- 6. CERRAR SESIÓN ----------
-const botonCerrarSesion = document.getElementById("boton-cerrar-sesion");
-
-if (botonCerrarSesion) {
-    botonCerrarSesion.addEventListener("click", function() {
-        if (confirm("¿Estás seguro de que querés cerrar sesión?")) {
-            localStorage.removeItem("authToken");
-            window.location.href = "iniciarsesion.html";
-        }
-    });
-}

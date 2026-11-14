@@ -13,4 +13,9 @@ public interface SuscripcionRepository extends JpaRepository<Suscripcion, Long> 
             Long usuarioId,
             Suscripcion.EstadoSuscripcion estado
     );
+
+    Optional<Suscripcion> findFirstByUsuarioIdAndEstadoOrderByFechaInicioDesc(
+            Long usuarioId,
+            Suscripcion.EstadoSuscripcion estado
+    );
 }

@@ -35,6 +35,10 @@ public class SecurityConfig {
                                 "/api/usuarios/registro",
                                 "/api/usuarios/login"
                         ).permitAll()
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/planes/premium"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
 

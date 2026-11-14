@@ -22,14 +22,15 @@
             <li>Movimientos recurrentes ilimitados</li>
         </ul>
         
-        <button class="boton-plan"> 
-            1 Mes <span class="precio-plan">10$ / Mes</span>
+        <button class="boton-plan" id="boton-mensual">
+            1 Mes <span class="precio-plan" id="precio-mensual">Cargando...</span>
         </button>
-        <button class="boton-plan"> 
-            12 Meses <span class="precio-plan">5$ / Mes</span>
+
+        <button class="boton-plan" id="boton-anual">
+            12 Meses <span class="precio-plan" id="precio-anual">Cargando...</span>
         </button>
-        <p class="subtitulo-plan">Probá Balance Premium Gratis por 7 días</p>
-        <button class="boton-plan-2"> 
+
+        <button class="boton-plan-2" id="boton-guardar-plan" disabled> 
             Probá Balance Premium
         </button>
         <a href="#" class="cerrar-plan" onclick="history.back(); return false;">
@@ -37,5 +38,6 @@
         </a>
     </div>
 </main>
+<script src="../js/premium.js"></script>
 </body>
 </html>

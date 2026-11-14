@@ -32,8 +32,11 @@ public class DataInitializer {
 
             // PLANES
 
-            crearPlan(planRepository, "GRATIS");
-            crearPlan(planRepository, "PREMIUM");
+            crearPlan(planRepository, "GRATIS",
+                    BigDecimal.ZERO, BigDecimal.ZERO);
+
+            crearPlan(planRepository, "PREMIUM",
+                    new BigDecimal("4999"), new BigDecimal("36000"));
 
         };
     }
@@ -60,15 +63,17 @@ public class DataInitializer {
 
     private void crearPlan(
             PlanRepository repositorio,
-            String nombre) {
+            String nombre,
+            BigDecimal precioMensual,
+            BigDecimal precioAnual) {
 
         if (!repositorio.existsByNombre(nombre)) {
 
             Plan plan = new Plan();
 
             plan.setNombre(nombre);
-            plan.setPrecioMensual(BigDecimal.ZERO);
-            plan.setPrecioAnual(BigDecimal.ZERO);
+            plan.setPrecioMensual(precioMensual);
+            plan.setPrecioAnual(precioAnual);
             plan.setLimiteCuentas(null);
             plan.setLimiteFondos(null);
             plan.setPermiteMultimoneda(true);

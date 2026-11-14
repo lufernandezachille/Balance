@@ -7,7 +7,14 @@ import com.balance.balance.model.Usuario;
 import com.balance.balance.service.UsuarioService;
 import com.balance.balance.service.JwtService;
 import com.balance.balance.service.SesionService;
+import com.balance.balance.dto.ActualizarPerfilRequest;
+import com.balance.balance.dto.SuscripcionRespuesta;
+import com.balance.balance.service.SuscripcionService;
+import com.balance.balance.dto.ActivarPremiumRequest;
+import com.balance.balance.dto.SuscripcionRespuesta;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 
@@ -18,13 +25,16 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
     private final JwtService jwtService;
     private final SesionService sesionService;
+    private final SuscripcionService suscripcionService;
 
     public UsuarioController(UsuarioService usuarioService,
                              JwtService jwtService,
-                             SesionService sesionService) {
+                             SesionService sesionService,
+                             SuscripcionService suscripcionService) {
         this.usuarioService = usuarioService;
         this.jwtService = jwtService;
         this.sesionService = sesionService;
+        this.suscripcionService = suscripcionService;
     }
 
     @PostMapping("/registro")
@@ -98,5 +108,44 @@ public class UsuarioController {
         Usuario usuario = usuarioService.buscarPorCorreo(correo);
 
         return convertirRespuesta(usuario);
+    }
+
+    @PutMapping("/perfil")
+    public UsuarioRespuesta actualizarPerfil(
+            @RequestBody ActualizarPerfilRequest datos,
+            Authentication autenticacion) {
+
+        String correo = autenticacion.getName();
+
+        Usuario usuarioActual = usuarioService.buscarPorCorreo(correo);
+
+        Usuario actualizado = usuarioService.actualizarPerfil(
+                usuarioActual.getId(), datos
+        );
+
+        return convertirRespuesta(actualizado);
+    }
+
+    @GetMapping("/suscripcion")
+    public SuscripcionRespuesta obtenerSuscripcion(
+            @org.springframework.security.core.annotation.AuthenticationPrincipal
+            String correo) {
+
+        Usuario usuario = usuarioService.buscarPorCorreo(correo);
+
+        return suscripcionService.obtenerSuscripcionActual(usuario.getId());
+    }
+
+    @PostMapping("/suscripcion/premium")
+    public SuscripcionRespuesta activarPremium(
+            @AuthenticationPrincipal String correo,
+            @RequestBody ActivarPremiumRequest request) {
+
+        Usuario usuario = usuarioService.buscarPorCorreo(correo);
+
+        return suscripcionService.activarPremium(
+                usuario,
+                request.getFrecuenciaPago()
+        );
     }
 }

@@ -69,7 +69,7 @@ botonAnual.addEventListener("click", () => {
 // Guardar suscripción
 botonGuardar.addEventListener("click", async () => {
 
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("authToken");
 
     if (!token) {
         alert("Tenés que iniciar sesión para cambiar tu plan.");

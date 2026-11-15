@@ -148,4 +148,13 @@ public class UsuarioController {
                 request.getFrecuenciaPago()
         );
     }
+
+    @PostMapping("/suscripcion/cancelar")
+    public SuscripcionRespuesta cancelarSuscripcion(
+            @AuthenticationPrincipal String correo) {
+
+        Usuario usuario = usuarioService.buscarPorCorreo(correo);
+
+        return suscripcionService.cancelarSuscripcion(usuario.getId());
+    }
 }

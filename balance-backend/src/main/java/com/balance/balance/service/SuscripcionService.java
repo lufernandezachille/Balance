@@ -109,4 +109,25 @@ public class SuscripcionService {
                 nuevaSuscripcion.getFechaRenovacion()
         );
     }
+
+    @Transactional
+    public SuscripcionRespuesta cancelarSuscripcion(Long usuarioId) {
+
+        Suscripcion suscripcion = suscripcionRepository
+                .findFirstByUsuarioIdAndEstadoOrderByFechaInicioDesc(
+                        usuarioId, Suscripcion.EstadoSuscripcion.ACTIVA)
+                .orElseThrow(() -> new RuntimeException("No hay una suscripción activa para cancelar."));
+
+        suscripcion.setEstado(Suscripcion.EstadoSuscripcion.CANCELADA);
+
+        suscripcionRepository.save(suscripcion);
+
+        return new SuscripcionRespuesta(
+                suscripcion.getPlan().getNombre(),
+                suscripcion.getEstado().name(),
+                suscripcion.getFrecuenciaPago().name(),
+                suscripcion.getFechaInicio(),
+                suscripcion.getFechaRenovacion()
+        );
+    }
 }

@@ -189,13 +189,11 @@ if (formularioCuenta) {
         }
     }
 
-    // Cargar suscripción actual desde el Backend
+    // Cargar suscripción actual
     async function cargarSuscripcion() {
-
         const token = localStorage.getItem("authToken");
 
         try {
-
             const respuesta = await fetch(`${API_URL}/usuarios/suscripcion`, {
                 method: "GET",
                 headers: {
@@ -209,21 +207,20 @@ if (formularioCuenta) {
 
             const suscripcion = await respuesta.json();
 
-            const nombrePlan = suscripcion.nombrePlan;
+            console.log("Suscripción recibida:", suscripcion);
 
-            if (nombrePlan === "PREMIUM") {
+            if (suscripcion.nombrePlan === "PREMIUM" &&
+                suscripcion.estado === "ACTIVA") {
                 actualizarInterfazPlan("Premium");
             } else {
                 actualizarInterfazPlan("Gratis");
             }
 
         } catch (error) {
-
             console.error("Error al cargar la suscripción:", error);
-
         }
     }
-
+    
     // Guardar cambios del perfil
     formularioCuenta.addEventListener("submit", async function(event) {
         event.preventDefault();
@@ -306,6 +303,38 @@ if (btnObtener) {
     });
 }
 
+// Cancelar suscripción Premium
+const btnCancelar = document.getElementById("boton-cancelar-premium");
+
+if (btnCancelar) {
+    btnCancelar.addEventListener("click", async () => {
+
+        if (!confirm("¿Estás seguro de que querés cancelar tu suscripción Premium?")) {
+            return;
+        }
+
+        const token = localStorage.getItem("authToken");
+
+        try {
+            const respuesta = await fetch(`${API_URL}/usuarios/suscripcion/cancelar`, {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
+            if (!respuesta.ok) {
+                throw new Error("No se pudo cancelar la suscripción.");
+            }
+
+            alert("Tu suscripción Premium fue cancelada.");
+            actualizarInterfazPlan("Gratis");
+
+        } catch (error) {
+            alert(error.message);
+        }
+    });
+}
 
 // ---------- 6. CERRAR SESIÓN ----------
 

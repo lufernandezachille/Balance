@@ -1,0 +1,212 @@
+
+package com.balance.balance.service;
+
+import com.balance.balance.model.*;
+import com.balance.balance.repository.*;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+@Service
+public class MovimientoService {
+
+    private final MovimientoRepository movimientoRepository;
+    private final CuentaRepository cuentaRepository;
+    private final FondoRepository fondoRepository;
+    private final CategoriaRepository categoriaRepository;
+    private final MonedaRepository monedaRepository;
+
+    public MovimientoService(
+            MovimientoRepository movimientoRepository,
+            CuentaRepository cuentaRepository,
+            FondoRepository fondoRepository,
+            CategoriaRepository categoriaRepository,
+            MonedaRepository monedaRepository) {
+
+        this.movimientoRepository = movimientoRepository;
+        this.cuentaRepository = cuentaRepository;
+        this.fondoRepository = fondoRepository;
+        this.categoriaRepository = categoriaRepository;
+        this.monedaRepository = monedaRepository;
+    }
+
+    @Transactional
+    public Movimiento crearMovimiento(Movimiento movimiento, Long usuarioId) {
+        validarRelaciones(movimiento, usuarioId);
+        aplicarImpacto(movimiento, true);
+
+        return movimientoRepository.save(movimiento);
+    }
+
+    public List<Movimiento> listarMovimientos(Long usuarioId) {
+        return movimientoRepository.findByUsuarioId(usuarioId);
+    }
+
+    public Movimiento buscarMovimiento(Long id, Long usuarioId) {
+        return movimientoRepository.findByIdAndUsuarioId(id, usuarioId)
+                .orElseThrow(() -> new RuntimeException("Movimiento no encontrado"));
+    }
+
+    @Transactional
+    public Movimiento actualizarMovimiento(Long id, Movimiento datos, Long usuarioId) {
+
+        Movimiento movimiento = buscarMovimiento(id, usuarioId);
+
+        // Revertimos el efecto del movimiento anterior.
+        aplicarImpacto(movimiento, false);
+
+        // Validamos los datos nuevos.
+        validarRelaciones(datos, usuarioId);
+
+        movimiento.setTipo(datos.getTipo());
+        movimiento.setMonto(datos.getMonto());
+        movimiento.setMoneda(datos.getMoneda());
+        movimiento.setCategoria(datos.getCategoria());
+        movimiento.setCuenta(datos.getCuenta());
+        movimiento.setCuentaDestino(datos.getCuentaDestino());
+        movimiento.setFondo(datos.getFondo());
+        movimiento.setFondoDestino(datos.getFondoDestino());
+        movimiento.setMedioPago(datos.getMedioPago());
+        movimiento.setFecha(datos.getFecha());
+        movimiento.setDescripcion(datos.getDescripcion());
+
+        // Aplicamos el nuevo efecto.
+        aplicarImpacto(movimiento, true);
+
+        return movimientoRepository.save(movimiento);
+    }
+
+    @Transactional
+    public void eliminarMovimiento(Long id, Long usuarioId) {
+
+        Movimiento movimiento = buscarMovimiento(id, usuarioId);
+
+        // Revertimos el efecto antes de eliminarlo.
+        aplicarImpacto(movimiento, false);
+
+        movimientoRepository.delete(movimiento);
+    }
+
+    private void aplicarImpacto(Movimiento movimiento, boolean aplicar) {
+
+        BigDecimal monto = movimiento.getMonto();
+
+        if (!aplicar) {
+            monto = monto.negate();
+        }
+
+        switch (movimiento.getTipo()) {
+
+            case INGRESO:
+                actualizarCuenta(movimiento.getCuenta(), monto);
+                actualizarFondo(movimiento.getFondo(), monto);
+                break;
+
+            case GASTO:
+                actualizarCuenta(movimiento.getCuenta(), monto.negate());
+                actualizarFondo(movimiento.getFondo(), monto.negate());
+                break;
+
+            case TRANSFERENCIA:
+                actualizarCuenta(movimiento.getCuenta(), monto.negate());
+                actualizarFondo(movimiento.getFondo(), monto.negate());
+
+                actualizarCuenta(movimiento.getCuentaDestino(), monto);
+                actualizarFondo(movimiento.getFondoDestino(), monto);
+                break;
+        }
+    }
+
+    private void actualizarCuenta(Cuenta cuenta, BigDecimal monto) {
+        if (cuenta != null) {
+            cuenta.setSaldoActual(cuenta.getSaldoActual().add(monto));
+            cuentaRepository.save(cuenta);
+        }
+    }
+
+    private void actualizarFondo(Fondo fondo, BigDecimal monto) {
+        if (fondo != null) {
+            fondo.setSaldoActual(fondo.getSaldoActual().add(monto));
+            fondoRepository.save(fondo);
+        }
+    }
+
+    private void validarRelaciones(Movimiento movimiento, Long usuarioId) {
+
+        if (movimiento.getMonto() == null ||
+                movimiento.getMonto().signum() <= 0) {
+            throw new RuntimeException("El monto debe ser mayor a cero");
+        }
+
+        if (movimiento.getTipo() == null || movimiento.getFecha() == null) {
+            throw new RuntimeException("El tipo y la fecha son obligatorios");
+        }
+
+        if (movimiento.getMoneda() == null ||
+                movimiento.getMoneda().getId() == null ||
+                !monedaRepository.existsById(movimiento.getMoneda().getId())) {
+            throw new RuntimeException("La moneda no existe");
+        }
+
+        if (movimiento.getCuenta() != null) {
+            movimiento.setCuenta(
+                    cuentaRepository.findByIdAndUsuarioId(
+                                    movimiento.getCuenta().getId(), usuarioId)
+                            .orElseThrow(() -> new RuntimeException("Cuenta no válida"))
+            );
+        }
+
+        if (movimiento.getCuentaDestino() != null) {
+            movimiento.setCuentaDestino(
+                    cuentaRepository.findByIdAndUsuarioId(
+                                    movimiento.getCuentaDestino().getId(), usuarioId)
+                            .orElseThrow(() -> new RuntimeException("Cuenta destino no válida"))
+            );
+        }
+
+        if (movimiento.getFondo() != null) {
+            movimiento.setFondo(
+                    fondoRepository.findByIdAndUsuarioId(
+                                    movimiento.getFondo().getId(), usuarioId)
+                            .orElseThrow(() -> new RuntimeException("Fondo no válido"))
+            );
+        }
+
+        if (movimiento.getFondoDestino() != null) {
+            movimiento.setFondoDestino(
+                    fondoRepository.findByIdAndUsuarioId(
+                                    movimiento.getFondoDestino().getId(), usuarioId)
+                            .orElseThrow(() -> new RuntimeException("Fondo destino no válido"))
+            );
+        }
+
+        if (movimiento.getCategoria() != null) {
+
+            Categoria categoria = categoriaRepository.findById(
+                            movimiento.getCategoria().getId())
+                    .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+
+            if (categoria.getUsuario() != null &&
+                    !categoria.getUsuario().getId().equals(usuarioId)) {
+                throw new RuntimeException("La categoría no pertenece al usuario");
+            }
+
+            movimiento.setCategoria(categoria);
+        }
+
+        if (movimiento.getTipo() == Movimiento.TipoMovimiento.TRANSFERENCIA) {
+
+            if (movimiento.getCuenta() == null && movimiento.getFondo() == null) {
+                throw new RuntimeException("La transferencia necesita un origen");
+            }
+
+            if (movimiento.getCuentaDestino() == null &&
+                    movimiento.getFondoDestino() == null) {
+                throw new RuntimeException("La transferencia necesita un destino");
+            }
+        }
+    }
+}

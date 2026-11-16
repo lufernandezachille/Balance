@@ -14,4 +14,8 @@ public interface FondoRepository extends JpaRepository<Fondo, Long> {
     Optional<Fondo> findByIdAndUsuarioId(Long id, Long usuarioId);
 
     Optional<Fondo> findByUsuarioIdAndEsFondoGeneralTrue(Long usuarioId);
+
+    List<Fondo> findByUsuarioIdAndEsMetaTrue(Long usuarioId);
+
+    Optional<Fondo> findByIdAndUsuarioIdAndEsMetaTrue(Long id, Long usuarioId);
 }

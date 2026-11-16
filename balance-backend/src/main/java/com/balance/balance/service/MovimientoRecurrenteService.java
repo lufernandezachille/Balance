@@ -192,6 +192,7 @@ public class MovimientoRecurrenteService {
                     movimiento.setFondo(recurrente.getFondo());
                     movimiento.setFecha(fecha);
                     movimiento.setDescripcion(recurrente.getDescripcion());
+                    movimiento.setEsRecurrente(true);
 
                     movimientoService.crearMovimiento(
                             movimiento, recurrente.getUsuario().getId());

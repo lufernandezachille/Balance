@@ -95,11 +95,22 @@ public class Movimiento {
     public String getDescripcion() { return descripcion; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
+    @Column(name = "es_recurrente", nullable = false)
+    private boolean esRecurrente = false;
+
     public enum TipoMovimiento {
         INGRESO, GASTO, TRANSFERENCIA
     }
 
     public enum MedioPago {
         EFECTIVO, TRANSFERENCIA, TARJETA
+    }
+
+    public boolean isEsRecurrente() {
+        return esRecurrente;
+    }
+
+    public void setEsRecurrente(boolean esRecurrente) {
+        this.esRecurrente = esRecurrente;
     }
 }

@@ -1,3 +1,4 @@
+
 package com.balance.balance.model;
 
 import jakarta.persistence.*;
@@ -19,13 +20,6 @@ public class Fondo {
     @Column(nullable = false)
     private String nombre;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "moneda_id", nullable = false)
-    private Moneda moneda;
-
-    @Column(name = "saldo_actual", nullable = false, precision = 15, scale = 2)
-    private BigDecimal saldoActual = BigDecimal.ZERO;
-
     @Column(name = "es_fondo_general", nullable = false)
     private boolean esFondoGeneral = false;
 
@@ -41,37 +35,65 @@ public class Fondo {
     @Column(name = "color_icono")
     private String colorIcono;
 
-    public Fondo() {
+    public Fondo() {}
+
+    public Long getId() {
+        return id;
     }
 
-    // Getters y setters
+    public Usuario getUsuario() {
+        return usuario;
+    }
 
-    public Long getId() { return id; }
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
 
-    public Usuario getUsuario() { return usuario; }
-    public void setUsuario(Usuario usuario) { this.usuario = usuario; }
+    public String getNombre() {
+        return nombre;
+    }
 
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
-    public Moneda getMoneda() { return moneda; }
-    public void setMoneda(Moneda moneda) { this.moneda = moneda; }
+    public boolean isEsFondoGeneral() {
+        return esFondoGeneral;
+    }
 
-    public BigDecimal getSaldoActual() { return saldoActual; }
-    public void setSaldoActual(BigDecimal saldoActual) { this.saldoActual = saldoActual; }
+    public void setEsFondoGeneral(boolean esFondoGeneral) {
+        this.esFondoGeneral = esFondoGeneral;
+    }
 
-    public boolean isEsFondoGeneral() { return esFondoGeneral; }
-    public void setEsFondoGeneral(boolean esFondoGeneral) { this.esFondoGeneral = esFondoGeneral; }
+    public boolean isEsMeta() {
+        return esMeta;
+    }
 
-    public boolean isEsMeta() { return esMeta; }
-    public void setEsMeta(boolean esMeta) { this.esMeta = esMeta; }
+    public void setEsMeta(boolean esMeta) {
+        this.esMeta = esMeta;
+    }
 
-    public BigDecimal getMontoObjetivo() { return montoObjetivo; }
-    public void setMontoObjetivo(BigDecimal montoObjetivo) { this.montoObjetivo = montoObjetivo; }
+    public BigDecimal getMontoObjetivo() {
+        return montoObjetivo;
+    }
 
-    public LocalDate getFechaObjetivo() { return fechaObjetivo; }
-    public void setFechaObjetivo(LocalDate fechaObjetivo) { this.fechaObjetivo = fechaObjetivo; }
+    public void setMontoObjetivo(BigDecimal montoObjetivo) {
+        this.montoObjetivo = montoObjetivo;
+    }
 
-    public String getColorIcono() { return colorIcono; }
-    public void setColorIcono(String colorIcono) { this.colorIcono = colorIcono; }
+    public LocalDate getFechaObjetivo() {
+        return fechaObjetivo;
+    }
+
+    public void setFechaObjetivo(LocalDate fechaObjetivo) {
+        this.fechaObjetivo = fechaObjetivo;
+    }
+
+    public String getColorIcono() {
+        return colorIcono;
+    }
+
+    public void setColorIcono(String colorIcono) {
+        this.colorIcono = colorIcono;
+    }
 }

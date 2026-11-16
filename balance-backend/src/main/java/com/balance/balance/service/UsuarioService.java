@@ -1,18 +1,25 @@
+
 package com.balance.balance.service;
 
 import com.balance.balance.model.Usuario;
 import com.balance.balance.model.Moneda;
-import com.balance.balance.repository.UsuarioRepository;
-import com.balance.balance.repository.MonedaRepository;
-import com.balance.balance.dto.ActualizarPerfilRequest;
+import com.balance.balance.model.Fondo;
 import com.balance.balance.model.Plan;
 import com.balance.balance.model.Suscripcion;
+
+import com.balance.balance.repository.UsuarioRepository;
+import com.balance.balance.repository.MonedaRepository;
 import com.balance.balance.repository.PlanRepository;
 import com.balance.balance.repository.SuscripcionRepository;
+import com.balance.balance.repository.FondoRepository;
+
+import com.balance.balance.dto.ActualizarPerfilRequest;
+
 import java.time.LocalDate;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UsuarioService {
@@ -22,21 +29,25 @@ public class UsuarioService {
     private final BCryptPasswordEncoder codificador = new BCryptPasswordEncoder();
     private final PlanRepository planRepository;
     private final SuscripcionRepository suscripcionRepository;
+    private final FondoRepository fondoRepository;
 
     public UsuarioService(
             UsuarioRepository usuarioRepository,
             MonedaRepository monedaRepository,
             PlanRepository planRepository,
-            SuscripcionRepository suscripcionRepository
+            SuscripcionRepository suscripcionRepository,
+            FondoRepository fondoRepository
     ) {
         this.usuarioRepository = usuarioRepository;
         this.monedaRepository = monedaRepository;
         this.planRepository = planRepository;
         this.suscripcionRepository = suscripcionRepository;
+        this.fondoRepository = fondoRepository;
     }
 
-
+    @Transactional
     public Usuario registrarUsuario(Usuario usuario, String codigoMoneda) {
+
         if (usuarioRepository.existsByCorreo(usuario.getCorreo())) {
             throw new RuntimeException("El correo ya está registrado");
         }
@@ -65,10 +76,19 @@ public class UsuarioService {
 
         suscripcionRepository.save(suscripcion);
 
+        // Creamos automáticamente el fondo general.
+        Fondo fondoGeneral = new Fondo();
+        fondoGeneral.setUsuario(usuarioGuardado);
+        fondoGeneral.setNombre("General");
+        fondoGeneral.setEsFondoGeneral(true);
+
+        fondoRepository.save(fondoGeneral);
+
         return usuarioGuardado;
     }
-    
+
     public Usuario autenticarUsuario(String correo, String contrasena) {
+
         Usuario usuario = usuarioRepository.findByCorreo(correo)
                 .orElseThrow(() -> new RuntimeException("El correo no está registrado"));
 
@@ -85,6 +105,7 @@ public class UsuarioService {
     }
 
     public Usuario actualizarPerfil(Long id, ActualizarPerfilRequest datos) {
+
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("El usuario no existe"));
 

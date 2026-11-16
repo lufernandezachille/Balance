@@ -8,6 +8,10 @@ import com.balance.balance.service.UsuarioService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.List;
 
 @RestController
@@ -35,12 +39,44 @@ public class MovimientoController {
         return movimientoService.crearMovimiento(movimiento, usuario.getId());
     }
 
+
     @GetMapping
-    public List<Movimiento> listarMovimientos(Authentication authentication) {
+    public List<Movimiento> listarMovimientos(
+            @RequestParam(required = false) Movimiento.TipoMovimiento tipo,
+            @RequestParam(required = false) Long categoriaId,
+            @RequestParam(required = false) Long cuentaId,
+            @RequestParam(required = false) Long fondoId,
+            @RequestParam(required = false) Movimiento.MedioPago medioPago,
+            @RequestParam(required = false) Long monedaId,
+            @RequestParam(required = false)
+            @org.springframework.format.annotation.DateTimeFormat(
+                    iso = org.springframework.format.annotation.DateTimeFormat.ISO.DATE)
+            java.time.LocalDate fechaDesde,
+            @RequestParam(required = false)
+            @org.springframework.format.annotation.DateTimeFormat(
+                    iso = org.springframework.format.annotation.DateTimeFormat.ISO.DATE)
+            java.time.LocalDate fechaHasta,
+            @RequestParam(required = false) BigDecimal montoMinimo,
+            @RequestParam(required = false) BigDecimal montoMaximo,
+            Authentication authentication) {
+
         Usuario usuario = usuarioService.buscarPorCorreo(authentication.getName());
 
-        return movimientoService.listarMovimientos(usuario.getId());
+        return movimientoService.filtrarMovimientos(
+                usuario.getId(),
+                tipo,
+                categoriaId,
+                cuentaId,
+                fondoId,
+                medioPago,
+                monedaId,
+                fechaDesde,
+                fechaHasta,
+                montoMinimo,
+                montoMaximo
+        );
     }
+
 
     @PutMapping("/{id}")
     public Movimiento actualizarMovimiento(

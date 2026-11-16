@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.time.LocalDate;
 
 @Service
 public class MovimientoService {
@@ -269,4 +270,43 @@ public class MovimientoService {
             throw new RuntimeException("La moneda del movimiento debe coincidir con la de la cuenta");
         }
     }
+
+    public List<Movimiento> filtrarMovimientos(
+            Long usuarioId,
+            Movimiento.TipoMovimiento tipo,
+            Long categoriaId,
+            Long cuentaId,
+            Long fondoId,
+            Movimiento.MedioPago medioPago,
+            Long monedaId,
+            LocalDate fechaDesde,
+            LocalDate fechaHasta,
+            BigDecimal montoMinimo,
+            BigDecimal montoMaximo) {
+
+        if (fechaDesde != null && fechaHasta != null &&
+                fechaDesde.isAfter(fechaHasta)) {
+            throw new RuntimeException("La fecha desde no puede ser posterior a la fecha hasta");
+        }
+
+        if (montoMinimo != null && montoMaximo != null &&
+                montoMinimo.compareTo(montoMaximo) > 0) {
+            throw new RuntimeException("El monto mínimo no puede ser mayor al máximo");
+        }
+
+        return movimientoRepository.filtrarMovimientos(
+                usuarioId,
+                tipo,
+                categoriaId,
+                cuentaId,
+                fondoId,
+                medioPago,
+                monedaId,
+                fechaDesde,
+                fechaHasta,
+                montoMinimo,
+                montoMaximo
+        );
+    }
+
 }

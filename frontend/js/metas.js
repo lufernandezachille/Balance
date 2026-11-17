@@ -1,156 +1,145 @@
-// ---------- Crear o editar una meta ----------
+const API_URL = "http://localhost:8080/api";
+const token = localStorage.getItem("authToken");
 
-const formularioMeta = document.getElementById("formulario-meta");
-
-if (formularioMeta) {
-
-    // Comprobar si estamos editando una meta
-    const parametros = new URLSearchParams(window.location.search);
-    const idEditar = parametros.get("editar");
-
-    const guardadas = JSON.parse(localStorage.getItem("metas")) || [];
-
-    let metaEditar = null;
-
-    if (idEditar) {
-
-        metaEditar = guardadas.find(function(meta) {
-            return meta.id === Number(idEditar);
-        });
-
-        // Cargar los datos de la meta en el formulario
-        if (metaEditar) {
-
-            document.getElementById("nombre").value = metaEditar.nombre;
-            document.getElementById("moneda").value = metaEditar.moneda;
-            document.getElementById("monto").value = metaEditar.montoObjetivo;
-            document.getElementById("fecha-objetivo").value = metaEditar.fechaObjetivo;
-
-            document.getElementById("boton-meta").textContent = "Guardar cambios";
-            document.querySelector(".titulo-pagina").textContent = "Editar meta";
-
-        }
-
+function verificarSesion() {
+    if (!token) {
+        alert("Tenés que iniciar sesión.");
+        window.location.href = "iniciarsesion.html";
+        return false;
     }
-
-    formularioMeta.addEventListener("submit", function(event) {
-
-        event.preventDefault();
-
-        const nombre = document.getElementById("nombre").value;
-        const moneda = document.getElementById("moneda").value;
-        const monto = Number(document.getElementById("monto").value);
-        const fecha = document.getElementById("fecha-objetivo").value;
-
-        if (metaEditar) {
-
-            // Actualizar los datos de la meta existente
-            metaEditar.nombre = nombre;
-            metaEditar.moneda = moneda;
-            metaEditar.montoObjetivo = monto;
-            metaEditar.fechaObjetivo = fecha;
-
-        } else {
-
-            // Crear una meta nueva
-            const nuevaMeta = {
-                id: Date.now(),
-                nombre: nombre,
-                moneda: moneda,
-                montoObjetivo: monto,
-                fechaObjetivo: fecha,
-                montoAhorrado: 0
-            };
-
-            guardadas.push(nuevaMeta);
-
-        }
-
-        // Guardar los cambios
-        localStorage.setItem("metas", JSON.stringify(guardadas));
-
-        // Volver a la pantalla de metas
-        window.location.href = "metas.html";
-
-    });
-
+    return true;
 }
 
+// ---------- Formatos ----------
 
-// ---------- Datos para mostrar ----------
-
-function formatoMoneda(monto, moneda) {
-
+function formatoMoneda(monto, moneda = "ARS") {
     return new Intl.NumberFormat("es-AR", {
         style: "currency",
         currency: moneda,
         maximumFractionDigits: 2
-    }).format(monto);
-
+    }).format(monto || 0);
 }
 
-
 function formatoFecha(fecha) {
-
-    if (!fecha) {
-        return "Sin fecha límite";
-    }
-
-    const [año, mes, dia] = fecha.split("-").map(Number);
-
-    return new Date(año, mes - 1, dia).toLocaleDateString("es-AR", {
+    if (!fecha) return "Sin fecha límite";
+    const [anio, mes, dia] = fecha.split("-").map(Number);
+    return new Date(anio, mes - 1, dia).toLocaleDateString("es-AR", {
+        day: "numeric",
         month: "short",
         year: "numeric"
     });
-
 }
-
 
 function escaparHTML(texto) {
-
-    return String(texto).replace(/[&<>"']/g, function(caracter) {
-        const caracteres = {
-            "&": "&amp;",
-            "<": "&lt;",
-            ">": "&gt;",
-            '"': "&quot;",
-            "'": "&#39;"
-        };
-
-        return caracteres[caracter];
-    });
-
+    return String(texto).replace(/[&<>"']/g, c => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    }[c]));
 }
 
+// ---------- Crear o editar una meta (nuevameta.html) ----------
 
-// ---------- Crear una tarjeta de meta ----------
+const formularioMeta = document.getElementById("formulario-meta");
+
+if (formularioMeta && verificarSesion()) {
+    const parametros = new URLSearchParams(window.location.search);
+    const idEditar = parametros.get("editar");
+
+    // Cargar moneda base del usuario para mostrarla en el select
+    fetch(`${API_URL}/usuarios/perfil`, {
+        headers: { "Authorization": `Bearer ${token}` }
+    })
+        .then(r => r.ok ? r.json() : null)
+        .then(usuario => {
+            if (usuario && usuario.codigoMoneda) {
+                const selectMoneda = document.getElementById("moneda");
+                selectMoneda.innerHTML = `<option value="${usuario.codigoMoneda}" selected>${usuario.codigoMoneda}</option>`;
+            }
+        })
+        .catch(() => {});
+
+    // Si estamos editando, traer la meta desde GET /api/metas/{id}
+    if (idEditar) {
+        document.getElementById("boton-meta").textContent = "Guardar cambios";
+        document.querySelector(".titulo-pagina").textContent = "Editar meta";
+
+        fetch(`${API_URL}/metas/${idEditar}`, {
+            headers: { "Authorization": `Bearer ${token}` }
+        })
+            .then(async res => {
+                if (!res.ok) throw new Error("No se pudo cargar la meta.");
+                return res.json();
+            })
+            .then(meta => {
+                document.getElementById("nombre").value = meta.nombre || "";
+                document.getElementById("monto").value = meta.montoObjetivo || "";
+                document.getElementById("fecha-objetivo").value = meta.fechaObjetivo || "";
+                if (meta.moneda) {
+                    const selectMoneda = document.getElementById("moneda");
+                    selectMoneda.innerHTML = `<option value="${meta.moneda}" selected>${meta.moneda}</option>`;
+                }
+            })
+            .catch(err => {
+                alert(err.message);
+                window.location.href = "metas.html";
+            });
+    }
+
+    formularioMeta.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        const payload = {
+            nombre: document.getElementById("nombre").value.trim(),
+            montoObjetivo: Number(document.getElementById("monto").value),
+            fechaObjetivo: document.getElementById("fecha-objetivo").value,
+            colorIcono: null
+        };
+
+        const url = idEditar ? `${API_URL}/metas/${idEditar}` : `${API_URL}/metas`;
+        const metodo = idEditar ? "PUT" : "POST";
+
+        try {
+            const respuesta = await fetch(url, {
+                method: metodo,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!respuesta.ok) {
+                const textoError = await respuesta.text();
+                throw new Error(textoError || "No se pudo guardar la meta.");
+            }
+
+            window.location.href = "metas.html";
+        } catch (error) {
+            alert(error.message);
+        }
+    });
+}
+
+// ---------- Listado de metas (metas.html) ----------
 
 function crearTarjeta(meta) {
+    const porcentaje = Math.min(Number(meta.porcentajeProgreso || 0), 100);
+    const faltante = Math.max(Number(meta.montoRestante || 0), 0);
 
-    // Calcular el porcentaje de progreso
-    const porcentaje = Math.min(
-        (meta.montoAhorrado / meta.montoObjetivo) * 100,
-        100
-    );
-
-    // Calcular cuánto dinero falta
-    const faltante = Math.max(
-        meta.montoObjetivo - meta.montoAhorrado,
-        0
-    );
-
-    // Elegir un icono según el nombre
     let icono = "◎";
+    if (meta.nombre.toLowerCase().includes("viaje")) icono = "✈";
 
-    if (meta.nombre.toLowerCase().includes("viaje")) {
-        icono = "✈";
+    let textoEstado = "";
+    if (meta.estado === "CUMPLIDA") {
+        textoEstado = "¡Meta alcanzada!";
+    } else if (meta.estado === "VENCIDA") {
+        textoEstado = `Vencida · Faltan ${formatoMoneda(faltante, meta.moneda)}`;
+    } else {
+        textoEstado = `Faltan ${formatoMoneda(faltante, meta.moneda)}`;
     }
 
     return `
         <article class="tarjeta-meta">
-
             <div class="encabezado-meta">
-
                 <div class="icono-meta">
                     <span>${icono}</span>
                 </div>
@@ -179,15 +168,12 @@ function crearTarjeta(meta) {
             </div>
 
             <div class="montos-meta">
-
                 <p class="monto-ahorrado">
-                    ${formatoMoneda(meta.montoAhorrado, meta.moneda)}
+                    ${formatoMoneda(meta.montoAcumulado, meta.moneda)}
                 </p>
-
                 <p class="monto-objetivo">
                     de ${formatoMoneda(meta.montoObjetivo, meta.moneda)}
                 </p>
-
             </div>
 
             <div class="barra-progreso">
@@ -195,93 +181,67 @@ function crearTarjeta(meta) {
             </div>
 
             <div class="detalle-progreso">
-
                 <span>${porcentaje.toFixed(0)}% completado</span>
-
-                <span>
-                    ${faltante > 0
-                        ? "Faltan " + formatoMoneda(faltante, meta.moneda)
-                        : "¡Meta alcanzada!"
-                    }
-                </span>
-
+                <span>${textoEstado}</span>
             </div>
-
         </article>
     `;
-
 }
-
-
-// ---------- Mostrar las metas guardadas ----------
 
 const listaMetas = document.getElementById("lista-metas");
 const mensajeVacio = document.getElementById("mensaje-vacio");
 
-if (listaMetas) {
+async function cargarMetas() {
+    if (!listaMetas || !verificarSesion()) return;
 
-    const guardadas = JSON.parse(localStorage.getItem("metas")) || [];
+    try {
+        const respuesta = await fetch(`${API_URL}/metas`, {
+            headers: { "Authorization": `Bearer ${token}` }
+        });
 
-    if (mensajeVacio) {
-        mensajeVacio.hidden = guardadas.length > 0;
+        if (!respuesta.ok) throw new Error("No se pudieron cargar las metas.");
+
+        const metas = await respuesta.json();
+
+        listaMetas.innerHTML = "";
+        if (mensajeVacio) mensajeVacio.hidden = metas.length > 0;
+
+        metas.sort((a, b) => b.id - a.id);
+        metas.forEach(meta => {
+            listaMetas.insertAdjacentHTML("beforeend", crearTarjeta(meta));
+        });
+    } catch (error) {
+        console.error(error);
+        alert(error.message);
     }
-
-    // Mostrar las más nuevas primero
-    guardadas.sort(function(a, b) {
-        return b.id - a.id;
-    });
-
-    guardadas.forEach(function(meta) {
-
-        listaMetas.insertAdjacentHTML("beforeend", crearTarjeta(meta));
-
-    });
-
 }
-
-// ---------- Opciones de las metas ----------
 
 function mostrarOpcionesMeta(id) {
-
     const menu = document.getElementById("menu-meta-" + id);
-
-    menu.hidden = !menu.hidden;
-
+    if (menu) menu.hidden = !menu.hidden;
 }
-
-
-// ---------- Editar una meta ----------
 
 function editarMeta(id) {
-
-    // Ir al formulario indicando qué meta queremos editar
     window.location.href = "nuevameta.html?editar=" + id;
-
 }
 
-
-// ---------- Eliminar una meta ----------
-
-function eliminarMeta(id) {
-
-    const confirmar = confirm("¿Estás seguro de que querés eliminar esta meta?");
-
-    if (!confirmar) {
+async function eliminarMeta(id) {
+    if (!confirm("¿Estás seguro de que querés eliminar esta meta? El dinero asignado volverá al fondo General.")) {
         return;
     }
 
-    // Obtener las metas guardadas
-    let guardadas = JSON.parse(localStorage.getItem("metas")) || [];
+    try {
+        const respuesta = await fetch(`${API_URL}/metas/${id}`, {
+            method: "DELETE",
+            headers: { "Authorization": `Bearer ${token}` }
+        });
 
-    // Eliminar la meta seleccionada
-    guardadas = guardadas.filter(function(meta) {
-        return meta.id !== id;
-    });
+        if (!respuesta.ok) throw new Error("No se pudo eliminar la meta.");
 
-    // Guardar la lista actualizada
-    localStorage.setItem("metas", JSON.stringify(guardadas));
-
-    // Actualizar la pantalla
-    location.reload();
-
+        await cargarMetas();
+    } catch (error) {
+        alert(error.message);
+    }
 }
+
+document.addEventListener("DOMContentLoaded", cargarMetas);

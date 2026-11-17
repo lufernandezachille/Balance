@@ -37,7 +37,8 @@ public class SecurityConfig {
                         ).permitAll()
                         .requestMatchers(
                                 HttpMethod.GET,
-                                "/api/planes/premium"
+                                "/api/planes/premium",
+                                "/api/monedas"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

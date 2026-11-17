@@ -23,12 +23,46 @@ const ICONOS = {
 
 
 // ---------- CONSULTAR API ----------
+async function cargarResumenMensual() {
+    try {
+        const [respEst, respPerfil] = await Promise.all([
+            fetch(`${API_URL}/estadisticas`, {
+                headers: { "Authorization": `Bearer ${token}` }
+            }),
+            fetch(`${API_URL}/usuarios/perfil`, {
+                headers: { "Authorization": `Bearer ${token}` }
+            })
+        ]);
+
+        if (!respEst.ok) return;
+
+        const estadisticas = await respEst.json();
+        const perfil = respPerfil.ok ? await respPerfil.json() : null;
+        const monedaBase = perfil?.codigoMoneda || "ARS";
+
+        const fmt = new Intl.NumberFormat("es-AR", {
+            style: "currency",
+            currency: monedaBase,
+            maximumFractionDigits: 2
+        });
+
+        const elIngresos = document.querySelector(".tarjeta-resumen.ingresos h2");
+        const elGastos = document.querySelector(".tarjeta-resumen.gastos h2");
+
+        if (elIngresos) elIngresos.textContent = fmt.format(estadisticas.resumen?.ingresos || 0);
+        if (elGastos) elGastos.textContent = fmt.format(estadisticas.resumen?.gastos || 0);
+    } catch (e) {
+        console.error("Error cargando resumen mensual:", e);
+    }
+}
 
 async function cargarMovimientos() {
 
+    localStorage.removeItem("movimientoEditar");
+
     if (!token) {
         alert("Tenés que iniciar sesión.");
-        window.location.href = "login.html";
+        window.location.href = "iniciarsesion.html";
         return;
     }
 
@@ -50,6 +84,7 @@ async function cargarMovimientos() {
             b.fecha.localeCompare(a.fecha) || b.id - a.id
         );
 
+        await cargarResumenMensual();
         mostrarMovimientos();
 
     } catch (error) {

@@ -21,241 +21,205 @@
         </a>
     </header>
     <hr class="separador-header">
-<main>
-    <h1 class="titulo-pagina">Patrimonio</h1>
 
-    <!-- PATRIMONIO TOTAL -->
-    <section class="tarjeta-patrimonio-total">
+    <main>
+        <h1 class="titulo-pagina">Patrimonio</h1>
 
-        <p class="etiqueta-patrimonio">Patrimonio total</p>
-
-        <h2>$ 1.250.000</h2>
-
-        <p class="equivalente-patrimonio">
-            Equivalente en ARS
-        </p>
-
-    </section>
-
-
-    <!-- ACTUALIZACIÓN DE COTIZACIONES -->
-    <div class="actualizacion-cotizaciones">
-        <span>◷</span>
-        <p>Cotizaciones actualizadas: 17 oct. 2026 · 15:30</p>
-    </div>
-
-
-    <!-- DISTRIBUCIÓN POR MONEDA -->
-    <section class="tarjeta-distribucion">
-
-        <h2 class="titulo-seccion-patrimonio">
-            Distribución por moneda
-        </h2>
-
-        <!-- BARRA DE DISTRIBUCIÓN -->
-        <div class="barra-distribucion">
-
-            <div class="segmento ars"></div>
-            <div class="segmento usd"></div>
-            <div class="segmento otras"></div>
-
+        <!-- PESTAÑAS PRINCIPALES -->
+        <div class="pestanas-movimiento">
+            <button class="pestana-movimiento activa" type="button" id="tab-resumen" onclick="cambiarPestanaPatrimonio('resumen')">
+                Resumen
+            </button>
+            <button class="pestana-movimiento" type="button" id="tab-cuentas" onclick="cambiarPestanaPatrimonio('cuentas')">
+                Cuentas
+            </button>
+            <button class="pestana-movimiento" type="button" id="tab-fondos" onclick="cambiarPestanaPatrimonio('fondos')">
+                Fondos
+            </button>
         </div>
 
-        <!-- DETALLE DE MONEDAS -->
-        <div class="lista-monedas">
+        <!-- ==================== VISTA 1: RESUMEN Y GRÁFICOS ==================== -->
+        <div id="vista-resumen">
+            <section class="tarjeta-patrimonio-total">
+                <p class="etiqueta-patrimonio">Patrimonio total</p>
+                <h2 id="patrimonio-total-monto">$ 0,00</h2>
+                <p class="equivalente-patrimonio" id="patrimonio-moneda-base">
+                    Equivalente en ARS
+                </p>
+            </section>
 
-            <div class="moneda-patrimonio">
-
-                <div class="identificacion-moneda">
-                    <span class="indicador-moneda ars"></span>
-                    <p>ARS</p>
-                </div>
-
-                <p class="porcentaje-moneda">45%</p>
-                <p class="saldo-moneda">$ 450.000</p>
-
+            <div class="actualizacion-cotizaciones">
+                <span>◷</span>
+                <p id="texto-cotizaciones">Cargando cotizaciones...</p>
             </div>
 
+            <!-- DISTRIBUCIÓN POR MONEDA -->
+            <section class="tarjeta-distribucion">
+                <h2 class="titulo-seccion-patrimonio">
+                    Distribución por moneda
+                </h2>
 
-            <div class="moneda-patrimonio">
+                <div class="barra-distribucion" id="barra-distribucion"></div>
 
-                <div class="identificacion-moneda">
-                    <span class="indicador-moneda usd"></span>
-                    <p>USD</p>
+                <div class="lista-monedas" id="lista-monedas"></div>
+            </section>
+
+            <!-- EVOLUCIÓN DEL PATRIMONIO -->
+            <section class="tarjeta-evolucion">
+                <div class="encabezado-evolucion">
+                    <h2 class="titulo-seccion-patrimonio" id="titulo-evolucion">
+                        Evolución (1A)
+                    </h2>
+
+                    <div class="periodos-evolucion">
+                        <button type="button" class="periodo-evolucion" data-periodo="1M" onclick="cambiarPeriodoEvolucion('1M')">
+                            1M
+                        </button>
+                        <button type="button" class="periodo-evolucion" data-periodo="6M" onclick="cambiarPeriodoEvolucion('6M')">
+                            6M
+                        </button>
+                        <button type="button" class="periodo-evolucion activo" data-periodo="1A" onclick="cambiarPeriodoEvolucion('1A')">
+                            1A
+                        </button>
+                    </div>
                 </div>
 
-                <p class="porcentaje-moneda">35%</p>
-                <p class="saldo-moneda">USD 500</p>
+                <div class="grafico-patrimonio">
+                    <svg id="svg-evolucion" viewBox="0 0 320 130" preserveAspectRatio="none">
+                        <line x1="0" y1="20" x2="320" y2="20" class="linea-referencia"/>
+                        <line x1="0" y1="65" x2="320" y2="65" class="linea-referencia"/>
+                        <line x1="0" y1="110" x2="320" y2="110" class="linea-referencia"/>
 
+                        <polygon id="area-evolucion" points="" class="area-grafico"/>
+                        <polyline id="linea-evolucion" points="" class="linea-grafico"/>
+                        <g id="puntos-evolucion"></g>
+                    </svg>
+                </div>
+            </section>
+        </div>
+
+        <!-- ==================== VISTA 2: MIS CUENTAS ==================== -->
+        <div id="vista-cuentas" hidden>
+            <div class="encabezado-agregar" style="margin-top: 12px;">
+                <h2 class="titulo-seccion-patrimonio">Mis cuentas</h2>
+                <button type="button" class="boton-agregar" id="btn-mostrar-form-cuenta">+</button>
             </div>
 
+            <!-- FORMULARIO CREAR / EDITAR CUENTA -->
+            <form class="formulario" id="form-cuenta" hidden style="margin-bottom: 18px;">
+                <input type="hidden" id="cuenta-id">
 
-            <div class="moneda-patrimonio">
+                <div class="contenedor-campos">
+                    <div class="campo-formulario">
+                        <label class="titulo-campo" for="cuenta-nombre">Nombre de la cuenta</label>
+                        <input class="input-formulario" type="text" id="cuenta-nombre" placeholder="Ej. Mercado Pago, Banco Galicia, Efectivo" required>
+                    </div>
 
-                <div class="identificacion-moneda">
-                    <span class="indicador-moneda otras"></span>
-                    <p>Otras monedas</p>
+                    <div class="campo-formulario">
+                        <label class="titulo-campo" for="cuenta-tipo">Tipo de cuenta</label>
+                        <select class="input-formulario" id="cuenta-tipo" required>
+                            <option value="EFECTIVO">Efectivo</option>
+                            <option value="BANCO">Banco</option>
+                            <option value="BILLETERA_VIRTUAL">Billetera virtual</option>
+                            <option value="TARJETA_CREDITO">Tarjeta de crédito</option>
+                            <option value="INVERSIONES">Inversiones</option>
+                        </select>
+                    </div>
+
+                    <div class="campo-formulario">
+                        <label class="titulo-campo" for="cuenta-moneda">Moneda</label>
+                        <select class="input-formulario" id="cuenta-moneda" required>
+                            <option value="" disabled selected>Selecciona una moneda</option>
+                        </select>
+                    </div>
+
+                    <div class="campo-formulario" id="campo-cuenta-saldo">
+                        <label class="titulo-campo" for="cuenta-saldo">Saldo inicial</label>
+                        <input class="input-formulario" type="number" id="cuenta-saldo" step="0.01" value="0" required>
+                    </div>
+
+                    <div class="campo-formulario">
+                        <label class="titulo-campo">
+                            <input type="checkbox" id="cuenta-incluir" checked>
+                            Incluir en el cálculo de patrimonio total
+                        </label>
+                    </div>
                 </div>
 
-                <p class="porcentaje-moneda">20%</p>
+                <div class="botones-edicion">
+                    <button type="button" class="boton-cancelar" id="btn-cancelar-cuenta">Cancelar</button>
+                    <button type="submit" class="boton-guardar" id="btn-guardar-cuenta">Guardar cuenta</button>
+                </div>
+            </form>
 
-                <a href="#" class="consultar-saldo">
-                    Consultar saldo
-                </a>
+            <div class="lista-fondos" id="lista-cuentas-patrimonio"></div>
+            <p id="mensaje-cuentas-vacio" hidden>Todavía no creaste ninguna cuenta.</p>
+        </div>
 
+        <!-- ==================== VISTA 3: MIS FONDOS ==================== -->
+        <div id="vista-fondos" hidden>
+            <div class="encabezado-agregar" style="margin-top: 12px;">
+                <h2 class="titulo-seccion-patrimonio">Mis fondos</h2>
+                <button type="button" class="boton-agregar" id="btn-mostrar-form-fondo">+</button>
             </div>
 
-        </div>
+            <!-- FORMULARIO CREAR / EDITAR FONDO -->
+            <form class="formulario" id="form-fondo" hidden style="margin-bottom: 18px;">
+                <input type="hidden" id="fondo-id">
 
-    </section>
-
-
-    <!-- FONDOS -->
-    <section class="seccion-fondos">
-
-        <h2 class="titulo-seccion-patrimonio">
-            Tus fondos
-        </h2>
-
-        <div class="lista-fondos">
-
-            <!-- FONDO 1 -->
-            <article class="tarjeta-fondo">
-
-                <div class="icono-fondo">
-                    <span>▣</span>
+                <div class="contenedor-campos">
+                    <div class="campo-formulario">
+                        <label class="titulo-campo" for="fondo-nombre">Nombre del fondo</label>
+                        <input class="input-formulario" type="text" id="fondo-nombre" placeholder="Ej. Fondo de emergencia, Impuestos" required>
+                    </div>
                 </div>
 
-                <div class="informacion-fondo">
-                    <h3>Efectivo</h3>
-                    <p>Pesos argentinos</p>
+                <div class="botones-edicion">
+                    <button type="button" class="boton-cancelar" id="btn-cancelar-fondo">Cancelar</button>
+                    <button type="submit" class="boton-guardar" id="btn-guardar-fondo">Guardar fondo</button>
                 </div>
+            </form>
 
-                <p class="saldo-fondo">$ 450.000</p>
-
-            </article>
-
-
-            <!-- FONDO 2 -->
-            <article class="tarjeta-fondo">
-
-                <div class="icono-fondo">
-                    <span>$</span>
-                </div>
-
-                <div class="informacion-fondo">
-                    <h3>Ahorros en dólares</h3>
-                    <p>USD</p>
-                </div>
-
-                <p class="saldo-fondo">USD 500</p>
-
-            </article>
-
+            <div class="lista-fondos" id="lista-fondos-patrimonio"></div>
         </div>
+    </main>
 
-    </section>
+    <footer>
+        <nav>
+            <ul class="menu-footer">
+                <li class="boton-footer">
+                    <a class="texto-footer" href="../index.html">
+                        <img class="icono-footer" src="../img/iconoinicio.png" alt="Inicio">
+                        <p>Inicio</p>
+                    </a>
+                </li>
+                <li class="boton-footer">
+                    <a class="texto-footer" href="movimientos.html">
+                        <img class="icono-footer" src="../img/iconomovimientos.png" alt="Movimientos">
+                        <p>Movimientos</p>
+                    </a>
+                </li>
+                <li class="boton-nuevomovimiento-footer">
+                    <a href="nuevomovimiento.html">
+                        <img class="icono-nuevomovimiento-footer" src="../img/iconomas.png" alt="Nuevo movimiento">
+                    </a>
+                </li>
+                <li class="boton-footer">
+                    <a class="texto-footer activo" href="patrimonio.html">
+                        <img class="icono-footer" src="../img/iconopatrimonioactivo.png" alt="Patrimonio">
+                        <p>Patrimonio</p>
+                    </a>
+                </li>
+                <li class="boton-footer">
+                    <a class="texto-footer" href="metas.html">
+                        <img class="icono-footer" src="../img/iconometas.png" alt="Metas">
+                        <p>Metas</p>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </footer>
 
-
-    <!-- EVOLUCIÓN DEL PATRIMONIO -->
-    <section class="tarjeta-evolucion">
-
-        <div class="encabezado-evolucion">
-
-            <h2 class="titulo-seccion-patrimonio">
-                Evolución del patrimonio
-            </h2>
-
-            <div class="periodos-evolucion">
-
-                <button type="button" class="periodo-evolucion">
-                    1M
-                </button>
-
-                <button type="button" class="periodo-evolucion">
-                    6M
-                </button>
-
-                <button type="button" class="periodo-evolucion activo">
-                    1A
-                </button>
-
-            </div>
-
-        </div>
-
-        <!-- GRÁFICO -->
-        <div class="grafico-patrimonio">
-
-            <svg viewBox="0 0 320 130" preserveAspectRatio="none">
-
-                <!-- Líneas de referencia -->
-                <line x1="0" y1="20" x2="320" y2="20"
-                    class="linea-referencia"/>
-
-                <line x1="0" y1="65" x2="320" y2="65"
-                    class="linea-referencia"/>
-
-                <line x1="0" y1="110" x2="320" y2="110"
-                    class="linea-referencia"/>
-
-                <!-- Área debajo de la línea -->
-                <polygon
-                    points="0,110 30,100 60,88 90,78 120,65 150,55 180,43 210,42 240,33 270,27 300,15 320,5 320,110"
-                    class="area-grafico"
-                />
-
-                <!-- Línea de evolución -->
-                <polyline
-                    points="0,110 30,100 60,88 90,78 120,65 150,55 180,43 210,42 240,33 270,27 300,15 320,5"
-                    class="linea-grafico"
-                />
-
-                <!-- Puntos -->
-                <circle cx="0" cy="110" r="3" class="punto-grafico"/>
-                <circle cx="60" cy="88" r="3" class="punto-grafico"/>
-                <circle cx="120" cy="65" r="3" class="punto-grafico"/>
-                <circle cx="180" cy="43" r="3" class="punto-grafico"/>
-                <circle cx="240" cy="33" r="3" class="punto-grafico"/>
-                <circle cx="300" cy="15" r="3" class="punto-grafico"/>
-            </svg>
-        </div>
-    </section>
-</main>
-<footer>
-    <nav>
-        <ul class="menu-footer">
-            <li class="boton-footer">
-                <a class="texto-footer" href="../index.html">
-                    <img class="icono-footer" src="../img/iconoinicio.png" alt="Inicio">
-                    <p>Inicio</p>
-                </a>
-            </li>
-            <li class="boton-footer">
-                <a class="texto-footer" href="movimientos.html">
-                    <img class="icono-footer" src="../img/iconomovimientos.png" alt="Movimientos">
-                    <p>Movimientos</p>
-                </a>
-            </li>
-            <li class="boton-nuevomovimiento-footer">
-                <a href="nuevomovimiento.html">
-                <img class="icono-nuevomovimiento-footer" src="../img/iconomas.png" alt="Nuevo movimiento">
-                </a>
-            </li>
-            <li class="boton-footer">
-                <a class="texto-footer activo" href="patrimonio.html">
-                    <img class="icono-footer" src="../img/iconopatrimonioactivo.png" alt="Patrimonio">
-                    <p>Patrimonio</p>
-                </a>
-            </li>
-            <li class="boton-footer">
-                <a class="texto-footer" href="metas.html">
-                    <img class="icono-footer" src="../img/iconometas.png" alt="Metas">
-                    <p>Metas</p>
-                </a>
-            </li>
-        </ul>
-    </nav>
-</footer>
+    <script src="../js/patrimonio.js"></script>
 </body>
 </html>

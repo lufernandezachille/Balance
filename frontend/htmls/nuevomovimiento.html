@@ -23,8 +23,10 @@
         </a>
     </header>
     <hr class="separador-header">
+
     <main>
         <h1 class="titulo-pagina">Nuevo movimiento</h1>
+
         <div class="pestanas-movimiento">
             <button class="pestana-movimiento activa" type="button" id="pestana-ingreso" onclick="cambiarTipo('ingreso')">
                 Ingreso
@@ -37,9 +39,11 @@
             </button>
         </div>
 
-        <form class="formulario" action="#" method="POST">
-            <input type="hidden" id="tipo" name="tipo" value="ingreso">
+        <form class="formulario" id="formulario-movimiento">
+            <input type="hidden" id="tipo" name="tipo" value="INGRESO">
+
             <div class="contenedor-campos">
+                <!-- Monto y Moneda -->
                 <div class="campo-formulario">
                     <label class="titulo-campo" for="importe">Monto</label>
                     <div class="contenedor-monto">
@@ -50,78 +54,63 @@
                     </div>
                 </div>
 
+                <!-- Categoría (solo Ingreso / Gasto) -->
                 <div class="campo-formulario" id="campo-categoria">
                     <label class="titulo-campo" for="categoria">Categoría</label>
                     <select class="input-formulario" id="categoria" name="categoria" required>
                         <option value="" disabled selected>Selecciona una categoría</option>
-                        <option value="sueldo">Sueldo y trabajo</option>
-                        <option value="negocios">Negocios y ventas</option>
-                        <option value="regalos">Regalos y dinero recibido</option>
-                        <option value="inversiones">Inversiones</option>
-                        <option value="alquileres">Alquileres</option>
-                        <option value="otros">Otros ingresos</option>
                     </select>
                 </div>
 
+                <!-- Cuenta origen / destino -->
                 <div class="campo-formulario" id="campo-cuenta">
                     <label class="titulo-campo" id="titulo-cuenta" for="cuenta">
                         Cuenta de destino
                     </label>
-
                     <select class="input-formulario" id="cuenta" name="cuenta" required>
                         <option value="" disabled selected>Selecciona una cuenta</option>
                     </select>
                 </div>
 
+                <!-- Cuenta destino (solo Transferencia) -->
                 <div class="campo-formulario" id="campo-cuenta-destino" hidden>
                     <label class="titulo-campo" for="cuenta-destino">
                         Cuenta de destino
                     </label>
-
                     <select class="input-formulario" id="cuenta-destino" name="cuenta-destino">
                         <option value="" disabled selected>Selecciona una cuenta</option>
                     </select>
                 </div>
 
+                <!-- Fondo origen / asociado -->
                 <div class="campo-formulario" id="campo-fondo">
-                    <label class="titulo-campo" for="fondo">Fondo</label>
-
+                    <label class="titulo-campo" id="titulo-fondo" for="fondo">Fondo</label>
                     <select class="input-formulario" id="fondo" name="fondo" required>
                         <option value="" disabled selected>Selecciona un fondo</option>
                     </select>
                 </div>
 
+                <!-- Fondo destino (solo Transferencia) -->
                 <div class="campo-formulario" id="campo-destino" hidden>
                     <label class="titulo-campo" for="destino">Fondo de destino</label>
                     <select class="input-formulario" id="destino" name="destino">
                         <option value="" disabled selected>Selecciona un fondo</option>
-                        <option value="efectivo">Efectivo</option>
-                        <option value="banco">Cuenta bancaria</option>
-                        <option value="billetera">Billetera virtual</option>
-                        <option value="otro">Otro</option>
                     </select>
                 </div>
 
-                <div class="campo-formulario" id="campo-medio">
-                    <label class="titulo-campo" id="titulo-medio" for="medio">Medio de ingreso</label>
-                    <select class="input-formulario" id="medio" name="medio" required>
-                        <option value="" disabled selected>Selecciona un medio</option>
-                        <option value="efectivo">Efectivo</option>
-                        <option value="transferencia">Transferencia</option>
-                    </select>
-                </div>
-
+                <!-- Fecha -->
                 <div class="campo-formulario" id="campo-fecha">
                     <label class="titulo-campo" for="fecha">Fecha</label>
                     <input class="input-formulario input-fecha" type="date" id="fecha" name="fecha" required>
                 </div>
 
+                <!-- Descripción -->
                 <div class="campo-formulario">
                     <label class="titulo-campo" for="descripcion">Descripción</label>
-
                     <input class="input-formulario" type="text" id="descripcion" name="descripcion" placeholder="Ej. Compra del supermercado">
                 </div>
 
+                <!-- Recurrente -->
                 <div class="campo-formulario" id="campo-recurrente">
                     <label class="titulo-campo">
                         <input type="checkbox" id="es-recurrente" name="es_recurrente" value="1" onchange="mostrarRecurrencia()">
@@ -129,6 +118,7 @@
                     </label>
                 </div>
 
+                <!-- Datos de recurrencia + múltiples excepciones -->
                 <div id="datos-recurrencia" hidden>
                     <div class="campo-formulario">
                         <label class="titulo-campo" for="frecuencia">Frecuencia</label>
@@ -152,13 +142,21 @@
 
                     <div class="campo-formulario">
                         <label class="titulo-campo" for="fecha-excepcion">Excepciones</label>
-                        <input class="input-formulario input-fecha" type="date" id="fecha-excepcion" name="fecha_excepcion">
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <input class="input-formulario input-fecha" type="date" id="fecha-excepcion" style="flex: 1;">
+                            <button type="button" id="boton-agregar-excepcion" class="boton-secundario" style="white-space: nowrap;">
+                                + Agregar
+                            </button>
+                        </div>
+                        <div id="lista-excepciones" style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px;"></div>
                     </div>
                 </div>
             </div>
+
             <button class="boton-enviar" id="boton-movimiento" type="submit">Guardar movimiento</button>
         </form>
     </main>
+
     <footer>
         <nav>
             <ul class="menu-footer">
@@ -194,6 +192,7 @@
             </ul>
         </nav>
     </footer>
+
     <script src="../js/nuevomovimiento.js"></script>
 </body>
 </html>

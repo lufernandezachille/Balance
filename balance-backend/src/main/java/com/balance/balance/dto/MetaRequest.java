@@ -1,6 +1,8 @@
 
 package com.balance.balance.dto;
 
+import com.balance.balance.model.Moneda;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -10,6 +12,7 @@ public class MetaRequest {
     private BigDecimal montoObjetivo;
     private LocalDate fechaObjetivo;
     private String colorIcono;
+    private Long monedaId;
 
     public MetaRequest() {
     }
@@ -44,5 +47,13 @@ public class MetaRequest {
 
     public void setColorIcono(String colorIcono) {
         this.colorIcono = colorIcono;
+    }
+
+    public Long getMonedaId() {
+        return monedaId;
+    }
+
+    public void setMonedaId(Long monedaId) {
+        this.monedaId = monedaId;
     }
 }

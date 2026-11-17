@@ -328,8 +328,13 @@ formulario.addEventListener("submit", async function (evento) {
         const fondoDestinoId = Number(document.getElementById("destino").value);
         const cuentaDestino = cuentas.find(c => c.id === cuentaDestinoId);
 
-        if (!cuentaDestino || cuentaDestinoId === cuentaId) {
-            alert("Seleccioná una cuenta de destino diferente a la de origen.");
+        if (!cuentaDestino) {
+            alert("Seleccioná una cuenta de destino.");
+            return;
+        }
+
+        if (cuentaDestinoId === cuentaId && fondoDestinoId === fondoId) {
+            alert("La cuenta y el fondo de destino no pueden ser exactamente iguales a los de origen.");
             return;
         }
 

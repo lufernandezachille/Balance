@@ -6,6 +6,7 @@ import com.balance.balance.dto.MetaRespuesta;
 import com.balance.balance.model.Fondo;
 import com.balance.balance.model.FondoDetalle;
 import com.balance.balance.model.Usuario;
+import com.balance.balance.model.Moneda;
 import com.balance.balance.repository.FondoRepository;
 import com.balance.balance.repository.FondoDetalleRepository;
 
@@ -140,9 +141,10 @@ public class MetaService {
     // CALCULAR PROGRESO Y ARMAR RESPUESTA
     private MetaRespuesta convertirRespuesta(Fondo fondo) {
 
-        String monedaBase = fondo.getUsuario()
-                .getMonedaPredeterminada()
-                .getCodigo();
+        Moneda monedaMeta = fondo.getMoneda() != null
+                ? fondo.getMoneda()
+                : fondo.getUsuario().getMonedaPredeterminada();
+        String monedaBase = monedaMeta.getCodigo();
 
         List<FondoDetalle> detalles = fondoDetalleRepository
                 .findByFondoId(fondo.getId());

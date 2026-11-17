@@ -254,9 +254,12 @@ public class MovimientoService {
                 throw new RuntimeException("La transferencia necesita una cuenta de origen y otra de destino");
             }
 
-            if (movimiento.getCuenta().getId().equals(
-                    movimiento.getCuentaDestino().getId())) {
-                throw new RuntimeException("La cuenta de origen y destino no pueden ser iguales");
+            Long fondoOrigenId = movimiento.getFondo() != null ? movimiento.getFondo().getId() : null;
+            Long fondoDestinoId = movimiento.getFondoDestino() != null ? movimiento.getFondoDestino().getId() : null;
+
+            if (movimiento.getCuenta().getId().equals(movimiento.getCuentaDestino().getId())
+                    && java.util.Objects.equals(fondoOrigenId, fondoDestinoId)) {
+                throw new RuntimeException("La cuenta y el fondo de origen y destino no pueden ser exactamente iguales");
             }
 
             if (!movimiento.getCuenta().getMoneda().getId().equals(

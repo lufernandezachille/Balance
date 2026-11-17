@@ -35,6 +35,10 @@ public class Fondo {
     @Column(name = "color_icono")
     private String colorIcono;
 
+    @ManyToOne
+    @JoinColumn(name = "moneda_id")
+    private Moneda moneda;
+
     public Fondo() {}
 
     public Long getId() {
@@ -95,5 +99,13 @@ public class Fondo {
 
     public void setColorIcono(String colorIcono) {
         this.colorIcono = colorIcono;
+    }
+
+    public Moneda getMoneda() {
+        return moneda;
+    }
+
+    public void setMoneda(Moneda moneda) {
+        this.moneda = moneda;
     }
 }

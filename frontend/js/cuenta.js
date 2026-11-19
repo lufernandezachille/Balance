@@ -125,6 +125,8 @@ const formularioCuenta = document.getElementById("formulario-cuenta");
 if (formularioCuenta) {
 
     const vistaInformacion = document.getElementById("vista-informacion");
+    const botonActivarEdicion = document.getElementById("boton-activar-edicion");
+    const botonCancelarEdicion = document.getElementById("boton-cancelar-edicion");
 
     // Cargar datos del usuario desde el Backend
     async function cargarPerfil() {
@@ -157,9 +159,10 @@ if (formularioCuenta) {
             document.getElementById("correo").value = usuario.correo || "";
             document.getElementById("moneda").value = usuario.codigoMoneda || "ARS";
 
-            // Actualizar encabezado
+            // Actualizar encabezado e inicial del avatar
             const nombrePerfil = document.getElementById("nombre-perfil");
             const usuarioPerfil = document.getElementById("usuario-perfil");
+            const inicialPerfil = document.getElementById("inicial-perfil");
 
             if (nombrePerfil) {
                 nombrePerfil.textContent = `${usuario.nombre} ${usuario.apellido}`;
@@ -167,6 +170,10 @@ if (formularioCuenta) {
 
             if (usuarioPerfil) {
                 usuarioPerfil.textContent = `@${usuario.nombreUsuario}`;
+            }
+
+            if (inicialPerfil && usuario.nombre) {
+                inicialPerfil.textContent = usuario.nombre.trim().charAt(0).toUpperCase();
             }
 
             // Actualizar vista de solo lectura
@@ -207,13 +214,11 @@ if (formularioCuenta) {
 
             const suscripcion = await respuesta.json();
 
-            console.log("Suscripción recibida:", suscripcion);
-
             if (suscripcion.nombrePlan === "PREMIUM" &&
                 suscripcion.estado === "ACTIVA") {
                 actualizarInterfazPlan("Premium");
             } else {
-                actualizarInterfazPlan("Gratis");
+                actualizarInterfazPlan("Gratuito");
             }
 
         } catch (error) {
@@ -234,6 +239,18 @@ if (formularioCuenta) {
             correo: document.getElementById("correo").value.trim().toLowerCase(),
             codigoMoneda: document.getElementById("moneda").value
         };
+
+        // Validaciones antes de enviar (CU-04)
+        if (!datosActualizados.nombre || !datosActualizados.apellido ||
+            !datosActualizados.nombreUsuario || !datosActualizados.correo) {
+            alert("Todos los campos son obligatorios y no pueden contener solo espacios.");
+            return;
+        }
+
+        if (datosActualizados.nombreUsuario.includes(" ")) {
+            alert("El nombre de usuario no puede contener espacios.");
+            return;
+        }
 
         try {
             const respuesta = await fetch(`${API_URL}/usuarios/perfil`, {
@@ -257,33 +274,30 @@ if (formularioCuenta) {
 
             formularioCuenta.hidden = true;
             vistaInformacion.hidden = false;
+            if (botonActivarEdicion) botonActivarEdicion.hidden = false;
 
         } catch (error) {
             alert(error.message);
         }
     });
 
-
     // Activar edición
-    const botonActivarEdicion = document.getElementById("boton-activar-edicion");
-
     if (botonActivarEdicion) {
         botonActivarEdicion.addEventListener("click", () => {
             vistaInformacion.hidden = true;
             formularioCuenta.hidden = false;
+            botonActivarEdicion.hidden = true;
         });
     }
 
-
     // Cancelar edición
-    const botonCancelarEdicion = document.getElementById("boton-cancelar-edicion");
-
     if (botonCancelarEdicion) {
         botonCancelarEdicion.addEventListener("click", async () => {
             await cargarPerfil();
 
             formularioCuenta.hidden = true;
             vistaInformacion.hidden = false;
+            if (botonActivarEdicion) botonActivarEdicion.hidden = false;
         });
     }
 
@@ -291,7 +305,6 @@ if (formularioCuenta) {
     cargarPerfil();
     cargarSuscripcion();
 }
-
 
 // ---------- 5. ACCIONES DE BOTONES DE SUSCRIPCIÓN ----------
 
@@ -328,7 +341,7 @@ if (btnCancelar) {
             }
 
             alert("Tu suscripción Premium fue cancelada.");
-            actualizarInterfazPlan("Gratis");
+            actualizarInterfazPlan("Gratuito");
 
         } catch (error) {
             alert(error.message);

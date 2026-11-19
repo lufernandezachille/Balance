@@ -678,7 +678,22 @@ footer {
 .informacion-perfil p {
     color: var(--texto);
     font-size: 15px;
-    margin: 0;
+    margin: 0 0 8px;
+}
+
+.badge-plan {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 50px;
+    background-color: var(--dominante-sombra);
+    color: var(--subordinado);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.badge-plan.premium {
+    background-color: var(--subordinado);
+    color: var(--dominante-claro);
 }
 
 .seccion-cuenta {
@@ -691,31 +706,57 @@ footer {
     justify-content: space-between;
     align-items: center;
     gap: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 }
 
 .seccion-cuenta h2 {
     color: var(--subordinado);
     font-size: 22px;
-    font-weight: 500;
+    font-weight: 600;
     margin: 0;
 }
 
-.boton-editar {
-    border: none;
-    background: transparent;
+.datos-cuenta {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 22px;
+    background-color: var(--dominante-claro);
+    border: 1px solid var(--dominante-sombra);
+    border-radius: 18px;
+}
+
+.campo-vista {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--dominante-sombra);
+}
+
+.campo-vista:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.campo-vista .etiqueta {
     color: var(--acento-sombra);
-    font-family: "Urbanist", sans-serif;
-    font-size: 16px;
+    font-size: 13px;
     font-weight: 600;
-    cursor: pointer;
+}
+
+.campo-vista p {
+    color: var(--subordinado);
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
 }
 
 .formulario-cuenta {
     display: flex;
     flex-direction: column;
     gap: 18px;
-    padding: 25px;
+    padding: 22px;
     background-color: var(--dominante-claro);
     border: 1px solid var(--dominante-sombra);
     border-radius: 18px;
@@ -767,6 +808,7 @@ footer {
     border-radius: 10px;
     font-family: "Urbanist", sans-serif;
     font-size: 16px;
+    font-weight: 600;
     cursor: pointer;
 }
 
@@ -776,37 +818,79 @@ footer {
     border: 2px solid var(--subordinado);
 }
 
+.boton-cancelar:hover {
+    background-color: var(--dominante-sombra);
+}
+
 .boton-guardar {
     background-color: var(--subordinado);
     color: var(--dominante-claro);
     border: 2px solid var(--subordinado);
 }
 
-.opcion-configuracion {
-    margin-top: 15px;
-    padding: 20px;
+.boton-guardar:hover {
+    background-color: var(--subordinado-sombra);
+}
+
+.boton-secundario {
+    padding: 10px 16px;
+    border: 2px solid var(--subordinado);
+    border-radius: 10px;
+    background-color: transparent;
+    color: var(--subordinado);
+    font-family: "Urbanist", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.boton-secundario:hover {
+    background-color: var(--subordinado);
+    color: var(--dominante-claro);
+}
+
+.boton-peligro {
+    padding: 12px 16px;
+    border: 2px solid var(--negativo);
+    border-radius: 10px;
+    background-color: var(--negativo-fondo);
+    color: var(--negativo);
+    font-family: "Urbanist", sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.boton-peligro:hover {
+    background-color: var(--negativo);
+    color: var(--dominante-claro);
+}
+
+.detalle-plan {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 14px;
+    padding: 22px;
     background-color: var(--dominante-claro);
     border: 1px solid var(--dominante-sombra);
-    border-radius: 15px;
+    border-radius: 18px;
 }
 
-.opcion-configuracion h3 {
-    color: var(--subordinado);
-    font-size: 17px;
-    margin: 0 0 5px;
-}
-
-.opcion-configuracion p {
+.detalle-plan p {
     color: var(--texto);
-    font-size: 15px;
+    font-size: 16px;
     margin: 0;
+}
+
+.detalle-plan strong {
+    color: var(--subordinado);
 }
 
 .boton-cerrar-sesion {
     display: block;
     width: 85%;
-    margin: 35px auto 0;
-    margin-bottom: 20px;
+    margin: 35px auto 20px;
     padding: 15px;
     background-color: transparent;
     color: var(--acento-sombra);
@@ -1060,9 +1144,9 @@ footer {
     width: 90%;
     box-sizing: border-box;
     margin: 0 auto;
-    padding: 18px;
+    padding: 20px;
     background-color: var(--dominante-sombra);
-    border-radius: 15px;
+    border-radius: 18px;
 }
 
 .etiqueta-patrimonio {
@@ -1074,7 +1158,7 @@ footer {
 
 .tarjeta-patrimonio-total h2 {
     color: var(--subordinado);
-    font-size: 30px;
+    font-size: 32px;
     margin: 0 0 5px;
 }
 
@@ -1108,12 +1192,13 @@ footer {
     margin: 0 auto 20px;
     padding: 18px;
     background-color: var(--dominante-claro);
-    border-radius: 15px;
+    border: 1px solid var(--dominante-sombra);
+    border-radius: 18px;
 }
 
 .titulo-seccion-patrimonio {
     color: var(--subordinado);
-    font-size: 17px;
+    font-size: 18px;
     font-weight: 600;
     margin: 0;
 }
@@ -1212,6 +1297,82 @@ footer {
     font-weight: 600;
 }
 
+/* Pestañas Cuentas y Fondos */
+#vista-cuentas .encabezado-agregar,
+#vista-fondos .encabezado-agregar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    margin: 12px auto 16px;
+}
+
+#vista-cuentas .boton-agregar,
+#vista-fondos .boton-agregar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 12px;
+    background-color: var(--subordinado);
+    color: var(--dominante-claro);
+    font-size: 24px;
+    cursor: pointer;
+}
+
+#vista-cuentas .boton-agregar:hover,
+#vista-fondos .boton-agregar:hover {
+    background-color: var(--subordinado-sombra);
+}
+
+#form-cuenta,
+#form-fondo {
+    width: 90%;
+    box-sizing: border-box;
+    margin: 0 auto 20px;
+    padding: 22px 16px;
+    border-radius: 18px;
+}
+
+#form-cuenta .titulo-campo,
+#form-fondo .titulo-campo {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+#form-cuenta .input-formulario,
+#form-fondo .input-formulario {
+    box-sizing: border-box;
+    padding: 12px;
+    font-size: 15px;
+    background-color: var(--dominante-claro);
+}
+
+#form-cuenta label:has(input[type="checkbox"]) {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--texto);
+    cursor: pointer;
+}
+
+#form-cuenta input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--subordinado);
+    cursor: pointer;
+}
+
+#form-cuenta .botones-edicion,
+#form-fondo .botones-edicion {
+    width: 90%;
+}
+
 .seccion-fondos {
     width: 90%;
     box-sizing: border-box;
@@ -1224,20 +1385,35 @@ footer {
 .lista-fondos {
     display: flex;
     flex-direction: column;
-    margin-top: 12px;
+    gap: 12px;
+    width: 90%;
+    margin: 12px auto 20px;
 }
 
 .tarjeta-fondo {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 12px 0;
+    padding: 14px;
+    background-color: var(--dominante-claro);
     border: 1px solid var(--dominante-sombra);
-    border-radius: 12px;
+    border-radius: 15px;
 }
 
-.tarjeta-fondo + .tarjeta-fondo {
-    margin-top: -1px;
+.tarjeta-fondo button {
+    padding: 6px 10px;
+    border: 1px solid var(--dominante-sombra);
+    border-radius: 8px;
+    background-color: var(--dominante);
+    color: var(--subordinado);
+    font-family: "Urbanist", sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.tarjeta-fondo button:hover {
+    background-color: var(--dominante-sombra);
 }
 
 .icono-fondo {
@@ -1247,7 +1423,6 @@ footer {
     width: 42px;
     height: 42px;
     flex-shrink: 0;
-    margin-left: 8px;
     border-radius: 50%;
     background-color: var(--dominante-sombra);
     color: var(--subordinado);
@@ -1261,32 +1436,46 @@ footer {
 
 .informacion-fondo h3 {
     color: var(--subordinado);
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
     margin: 0 0 4px;
 }
 
 .informacion-fondo p {
     color: var(--texto);
-    font-size: 12px;
+    font-size: 13px;
     margin: 0;
 }
 
 .saldo-fondo {
     color: var(--subordinado);
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: 700;
     white-space: nowrap;
-    margin: 0 10px 0 0;
+    margin: 0 6px 0 0;
+}
+
+#mensaje-cuentas-vacio {
+    width: 90%;
+    box-sizing: border-box;
+    margin: 16px auto;
+    padding: 24px;
+    text-align: center;
+    color: var(--texto);
+    font-size: 15px;
+    background-color: var(--dominante-claro);
+    border: 1px dashed var(--dominante-sombra);
+    border-radius: 15px;
 }
 
 .tarjeta-evolucion {
     width: 90%;
     box-sizing: border-box;
-    margin: 0 auto;
+    margin: 0 auto 20px;
     padding: 18px;
     background-color: var(--dominante-claro);
-    border-radius: 15px;
+    border: 1px solid var(--dominante-sombra);
+    border-radius: 18px;
 }
 
 .encabezado-evolucion {

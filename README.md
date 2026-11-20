@@ -107,7 +107,7 @@ export JWT_SECRET="BalanceClaveSecretaSuperSeguraJWT2026!"
    ./mvnw spring-boot:run
 
    # Windows
-   mvnw.cmd spring-boot:run
+   .\mvnw.cmd spring-boot:run
    ```
 3. Verificá en la consola que el servidor levante sin errores en **`http://localhost:8080`**.
 

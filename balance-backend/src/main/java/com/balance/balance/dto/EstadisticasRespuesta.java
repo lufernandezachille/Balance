@@ -1,5 +1,4 @@
-
-package com.balance.balance.dto.estadisticas;
+package com.balance.balance.dto;
 
 import java.math.BigDecimal;
 import java.util.List;

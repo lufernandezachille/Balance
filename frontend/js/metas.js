@@ -112,6 +112,60 @@ if (formularioMeta && verificarSesion()) {
             if (idEditar) window.location.href = "metas.html";
         }
     })();
+}
+
+// ---------- Formulario de metas (crear-editar-metas.html) ----------
+
+function inicializarFormulario() {
+    const formularioMeta = document.getElementById("formulario-meta");
+
+    (async function () {
+        try {
+            const [respMonedas, respPerfil] = await Promise.all([
+                fetch(`${API_URL}/monedas`, {
+                    headers: { "Authorization": `Bearer ${token}` }
+                }),
+                fetch(`${API_URL}/usuarios/perfil`, {
+                    headers: { "Authorization": `Bearer ${token}` }
+                })
+            ]);
+
+            const monedas = respMonedas.ok ? await respMonedas.json() : [];
+            const perfil = respPerfil.ok ? await respPerfil.json() : null;
+
+            selectMoneda.innerHTML = monedas.map(m =>
+                `<option value="${m.id}">${m.codigo}</option>`
+            ).join("");
+
+            if (idEditar) {
+                document.getElementById("boton-meta").textContent = "Guardar cambios";
+                document.querySelector(".titulo-pagina").textContent = "Editar meta";
+
+                const res = await fetch(`${API_URL}/metas/${idEditar}`, {
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
+                if (!res.ok) throw new Error("No se pudo cargar la meta.");
+
+                const meta = await res.json();
+                document.getElementById("nombre").value = meta.nombre || "";
+                document.getElementById("monto").value = meta.montoObjetivo || "";
+                document.getElementById("fecha-objetivo").value = meta.fechaObjetivo || "";
+
+                const monedaMeta = monedas.find(m => m.codigo === meta.moneda);
+                if (monedaMeta) {
+                    selectMoneda.value = monedaMeta.id;
+                }
+            } else if (perfil?.codigoMoneda) {
+                const monedaBase = monedas.find(m => m.codigo === perfil.codigoMoneda);
+                if (monedaBase) {
+                    selectMoneda.value = monedaBase.id;
+                }
+            }
+        } catch (err) {
+            alert(err.message);
+            if (idEditar) window.location.href = "metas.html";
+        }
+    })();
 
         formularioMeta.addEventListener("submit", async function (event) {
         event.preventDefault();

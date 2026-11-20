@@ -113,47 +113,7 @@ if (formularioMeta && verificarSesion()) {
         }
     })();
 
-    formularioMeta.addEventListener("submit", async function (event) {
-        event.preventDefault();
-
-        const payload = {
-            nombre: document.getElementById("nombre").value.trim(),
-            montoObjetivo: Number(document.getElementById("monto").value),
-            fechaObjetivo: document.getElementById("fecha-objetivo").value,
-            colorIcono: null,
-            monedaId: Number(selectMoneda.value)
-        };
-
-        const url = idEditar ? `${API_URL}/metas/${idEditar}` : `${API_URL}/metas`;
-        const metodo = idEditar ? "PUT" : "POST";
-
-        try {
-            const respuesta = await fetch(url, {
-                method: metodo,
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify(payload)
-            });
-
-            if (!respuesta.ok) {
-                const textoError = await respuesta.text();
-                throw new Error(textoError || "No se pudo guardar la meta.");
-            }
-
-            window.location.href = "metas.html";
-        } catch (error) {
-            if (error.message && error.message.includes("LIMITE_PREMIUM")) {
-                window.location.href = "planpremium.html";
-                return;
-            }
-            alert(error.message);
-        }
-    });
-
-
-    formularioMeta.addEventListener("submit", async function (event) {
+        formularioMeta.addEventListener("submit", async function (event) {
         event.preventDefault();
 
         const payload = {

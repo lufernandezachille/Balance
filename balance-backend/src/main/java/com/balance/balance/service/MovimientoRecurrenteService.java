@@ -6,6 +6,7 @@ import com.balance.balance.repository.*;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,15 +17,18 @@ public class MovimientoRecurrenteService {
     private final MovimientoRecurrenteRepository recurrenteRepository;
     private final ExcepcionMovimientoRecurrenteRepository excepcionRepository;
     private final MovimientoService movimientoService;
+    private final SuscripcionService suscripcionService;
 
     public MovimientoRecurrenteService(
             MovimientoRecurrenteRepository recurrenteRepository,
             ExcepcionMovimientoRecurrenteRepository excepcionRepository,
-            MovimientoService movimientoService) {
+            MovimientoService movimientoService,
+            SuscripcionService suscripcionService) {
 
         this.recurrenteRepository = recurrenteRepository;
         this.excepcionRepository = excepcionRepository;
         this.movimientoService = movimientoService;
+        this.suscripcionService = suscripcionService;
     }
 
     // CREAR MOVIMIENTO RECURRENTE
@@ -33,6 +37,13 @@ public class MovimientoRecurrenteService {
             MovimientoRecurrente recurrente, Long usuarioId) {
 
         validar(recurrente);
+
+        if (!suscripcionService.esPremium(usuarioId)) {
+            int cantidadRecurrentes = recurrenteRepository.findByUsuarioId(usuarioId).size();
+            if (cantidadRecurrentes >= 3) {
+                throw new RuntimeException("LIMITE_PREMIUM: El plan gratuito permite hasta 3 movimientos recurrentes.");
+            }
+        }
 
         recurrente.setProximaFecha(recurrente.getFechaInicio());
 
@@ -151,10 +162,11 @@ public class MovimientoRecurrenteService {
 
     // PROCESAR MOVIMIENTOS QUE YA LLEGARON A SU FECHA
 
+    @Scheduled(cron = "0 5 0 * * *", zone = "America/Argentina/Buenos_Aires")
     @Transactional
     public void procesarVencidos() {
 
-        LocalDate hoy = LocalDate.now();
+        LocalDate hoy = LocalDate.now(java.time.ZoneId.of("America/Argentina/Buenos_Aires"));
 
         List<MovimientoRecurrente> recurrentes =
                 recurrenteRepository.findByActivoTrue();

@@ -1,3 +1,12 @@
+function fechaHoyArgentina() {
+    return new Intl.DateTimeFormat("en-CA", {
+        timeZone: "America/Argentina/Buenos_Aires",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+    }).format(new Date());
+}
+
 const API_URL = "http://localhost:8080/api";
 const token = localStorage.getItem("authToken");
 
@@ -246,7 +255,7 @@ function mostrarRecurrencia() {
 
     if (recurrente && !document.getElementById("fecha-inicio").value) {
         document.getElementById("fecha-inicio").value =
-            document.getElementById("fecha").value || new Date().toISOString().split("T")[0];
+            document.getElementById("fecha").value || fechaHoyArgentina();
     }
 }
 
@@ -388,6 +397,10 @@ formulario.addEventListener("submit", async function (evento) {
 
     } catch (error) {
         console.error(error);
+        if (error.message && error.message.includes("LIMITE_PREMIUM")) {
+            window.location.href = "planpremium.html";
+            return;
+        }
         alert("No se pudo guardar: " + error.message);
     }
 });
@@ -435,6 +448,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     } else {
         cambiarTipo("ingreso");
-        document.getElementById("fecha").value = new Date().toISOString().split("T")[0];
+        document.getElementById("fecha").value = fechaHoyArgentina();
     }
 });

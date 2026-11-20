@@ -86,6 +86,21 @@ async function cargarMovimientos() {
 
         await cargarResumenMensual();
         mostrarMovimientos();
+        try {
+            const respSus = await fetch(`${API_URL}/usuarios/suscripcion`, {
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+            const sus = respSus.ok ? await respSus.json() : null;
+            if (sus?.nombrePlan?.toUpperCase() !== "PREMIUM" && !document.getElementById("aviso-historial-premium")) {
+                historial.insertAdjacentHTML("afterend", `
+                    <p id="aviso-historial-premium" style="text-align: center; font-size: 0.9rem; margin: 18px auto; opacity: 0.85;">
+                        Mostrando movimientos de los últimos 3 meses.
+                        <a href="planpremium.html" style="font-weight: 600; text-decoration: underline;">Pasate a Premium</a>
+                        para ver tu historial completo.
+                    </p>
+                `);
+            }
+        } catch (_) {}
 
     } catch (error) {
         console.error(error);
@@ -174,21 +189,19 @@ function crearTarjeta(mov) {
             <div class="informacion-movimiento">
                 <h3>${titulo}</h3>
                 <p>${detalle}</p>
+                <div class="acciones-tarjeta">
+                    <button type="button" class="boton-secundario" onclick="editarMovimiento(${mov.id})">
+                        Editar
+                    </button>
+                    <button type="button" class="boton-peligro" onclick="eliminarMovimiento(${mov.id})">
+                        Eliminar
+                    </button>
+                </div>
             </div>
 
             <p class="monto-movimiento ${tipo.toLowerCase()}">
                 ${signo} ${moneda} ${importe}
             </p>
-
-            <div class="acciones-movimiento">
-                <button type="button" onclick="editarMovimiento(${mov.id})">
-                    Editar
-                </button>
-
-                <button type="button" onclick="eliminarMovimiento(${mov.id})">
-                    Eliminar
-                </button>
-            </div>
         </article>
     `;
 }

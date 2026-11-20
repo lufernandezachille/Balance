@@ -2,6 +2,7 @@ package com.balance.balance.controller;
 
 import com.balance.balance.model.Movimiento;
 import com.balance.balance.model.Usuario;
+import com.balance.balance.service.MovimientoRecurrenteService;
 import com.balance.balance.service.MovimientoService;
 import com.balance.balance.service.UsuarioService;
 
@@ -9,9 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import java.util.List;
 
 @RestController
@@ -19,12 +17,15 @@ import java.util.List;
 public class MovimientoController {
 
     private final MovimientoService movimientoService;
+    private final MovimientoRecurrenteService recurrenteService;
     private final UsuarioService usuarioService;
 
     public MovimientoController(
             MovimientoService movimientoService,
+            MovimientoRecurrenteService recurrenteService,
             UsuarioService usuarioService) {
         this.movimientoService = movimientoService;
+        this.recurrenteService = recurrenteService;
         this.usuarioService = usuarioService;
     }
 
@@ -38,7 +39,6 @@ public class MovimientoController {
 
         return movimientoService.crearMovimiento(movimiento, usuario.getId());
     }
-
 
     @GetMapping
     public List<Movimiento> listarMovimientos(
@@ -62,6 +62,8 @@ public class MovimientoController {
 
         Usuario usuario = usuarioService.buscarPorCorreo(authentication.getName());
 
+        recurrenteService.procesarVencidos();
+
         return movimientoService.filtrarMovimientos(
                 usuario.getId(),
                 tipo,
@@ -76,7 +78,6 @@ public class MovimientoController {
                 montoMaximo
         );
     }
-
 
     @PutMapping("/{id}")
     public Movimiento actualizarMovimiento(

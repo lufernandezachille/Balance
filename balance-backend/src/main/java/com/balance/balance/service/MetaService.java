@@ -1,4 +1,3 @@
-
 package com.balance.balance.service;
 
 import com.balance.balance.dto.MetaRequest;
@@ -9,6 +8,7 @@ import com.balance.balance.model.Usuario;
 import com.balance.balance.model.Moneda;
 import com.balance.balance.repository.FondoRepository;
 import com.balance.balance.repository.FondoDetalleRepository;
+import com.balance.balance.repository.MonedaRepository;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,22 +26,28 @@ public class MetaService {
 
     private final FondoRepository fondoRepository;
     private final FondoDetalleRepository fondoDetalleRepository;
+    private final MonedaRepository monedaRepository;
     private final UsuarioService usuarioService;
     private final CotizacionService cotizacionService;
     private final FondoService fondoService;
+    private final SuscripcionService suscripcionService;
 
     public MetaService(
             FondoRepository fondoRepository,
             FondoDetalleRepository fondoDetalleRepository,
+            MonedaRepository monedaRepository,
             UsuarioService usuarioService,
             CotizacionService cotizacionService,
-            FondoService fondoService) {
+            FondoService fondoService,
+            SuscripcionService suscripcionService) {
 
         this.fondoRepository = fondoRepository;
         this.fondoDetalleRepository = fondoDetalleRepository;
+        this.monedaRepository = monedaRepository;
         this.usuarioService = usuarioService;
         this.cotizacionService = cotizacionService;
         this.fondoService = fondoService;
+        this.suscripcionService = suscripcionService;
     }
 
     // CREAR META
@@ -52,6 +58,15 @@ public class MetaService {
 
         Usuario usuario = usuarioService.buscarPorCorreo(correo);
 
+        if (!suscripcionService.esPremium(usuario.getId())) {
+            int cantidadMetas = fondoRepository.findByUsuarioIdAndEsMetaTrue(usuario.getId()).size();
+            if (cantidadMetas >= 3) {
+                throw new RuntimeException("LIMITE_PREMIUM: El plan gratuito permite hasta 3 metas de ahorro.");
+            }
+        }
+
+        Moneda moneda = resolverMoneda(datos.getMonedaId(), usuario);
+
         Fondo fondo = new Fondo();
 
         fondo.setUsuario(usuario);
@@ -61,6 +76,7 @@ public class MetaService {
         fondo.setMontoObjetivo(datos.getMontoObjetivo());
         fondo.setFechaObjetivo(datos.getFechaObjetivo());
         fondo.setColorIcono(datos.getColorIcono());
+        fondo.setMoneda(moneda);
 
         Fondo metaGuardada = fondoRepository.save(fondo);
 
@@ -113,14 +129,25 @@ public class MetaService {
                 .findByIdAndUsuarioIdAndEsMetaTrue(id, usuario.getId())
                 .orElseThrow(() -> new RuntimeException("La meta no existe"));
 
+        Moneda moneda = resolverMoneda(datos.getMonedaId(), usuario);
+
         fondo.setNombre(datos.getNombre());
         fondo.setMontoObjetivo(datos.getMontoObjetivo());
         fondo.setFechaObjetivo(datos.getFechaObjetivo());
         fondo.setColorIcono(datos.getColorIcono());
+        fondo.setMoneda(moneda);
 
         Fondo metaActualizada = fondoRepository.save(fondo);
 
         return convertirRespuesta(metaActualizada);
+    }
+
+    private Moneda resolverMoneda(Long monedaId, Usuario usuario) {
+        if (monedaId == null) {
+            return usuario.getMonedaPredeterminada();
+        }
+        return monedaRepository.findById(monedaId)
+                .orElseThrow(() -> new RuntimeException("La moneda seleccionada no existe"));
     }
 
     // ELIMINAR META
@@ -169,7 +196,7 @@ public class MetaService {
             );
         }
 
-        // Convertimos todos los importes a la moneda predeterminada
+        // Convertimos todos los importes a la moneda de la meta
         BigDecimal montoAcumulado = BigDecimal.ZERO;
 
         for (Map.Entry<String, BigDecimal> entrada

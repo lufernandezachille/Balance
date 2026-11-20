@@ -1,6 +1,10 @@
 const API_URL = "http://localhost:8080/api";
 const token = localStorage.getItem("authToken");
 
+if (!token) {
+    window.location.replace("htmls/cuenta.html");
+}
+
 function formatoMoneda(monto, moneda = "ARS") {
     return new Intl.NumberFormat("es-AR", {
         style: "currency",

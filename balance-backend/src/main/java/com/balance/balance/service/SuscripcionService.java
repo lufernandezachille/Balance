@@ -146,4 +146,14 @@ public class SuscripcionService {
                 suscripcionGratis.getFechaRenovacion()
         );
     }
+
+    public boolean esPremium(Long usuarioId) {
+        return suscripcionRepository
+                .findFirstByUsuarioIdAndEstadoOrderByFechaInicioDesc(
+                        usuarioId,
+                        Suscripcion.EstadoSuscripcion.ACTIVA
+                )
+                .map(s -> "PREMIUM".equalsIgnoreCase(s.getPlan().getNombre()))
+                .orElse(false);
+    }
 }

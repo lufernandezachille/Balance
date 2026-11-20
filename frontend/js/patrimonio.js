@@ -166,17 +166,26 @@ function renderizarDistribucionMoneda() {
     const sumaBase = items.reduce((acc, it) => acc + it.enBase, 0) || 1;
     items.sort((a, b) => b.enBase - a.enBase);
 
-    const clasesColor = ["ars", "usd", "otras"];
+    const clasesColor = [
+        "moneda-1",
+        "moneda-2",
+        "moneda-3",
+        "moneda-4",
+        "moneda-5",
+        "moneda-6",
+        "moneda-7",
+        "moneda-8"
+    ];
 
     barra.innerHTML = items.map((it, idx) => {
         const pct = ((it.enBase / sumaBase) * 100).toFixed(1);
-        const clase = clasesColor[idx] || "otras";
+        const clase = clasesColor[idx % clasesColor.length];
         return `<div class="segmento ${clase}" style="width: ${pct}%;"></div>`;
     }).join("");
 
     lista.innerHTML = items.map((it, idx) => {
         const pct = Math.round((it.enBase / sumaBase) * 100);
-        const clase = clasesColor[idx] || "otras";
+        const clase = clasesColor[idx % clasesColor.length];
         return `
             <div class="moneda-patrimonio">
                 <div class="identificacion-moneda">
@@ -308,11 +317,11 @@ function renderizarCuentas() {
                 <div class="informacion-fondo">
                     <h3>${c.nombre}</h3>
                     <p>${tipoTexto} (${codigoMoneda})${notaPatrimonio}</p>
-                    <div style="display: flex; gap: 10px; margin-top: 6px;">
-                        <button type="button" class="boton-secundario" style="padding: 4px 10px; font-size: 0.8rem;" onclick="abrirEditarCuenta(${c.id})">
+                    <div class="acciones-tarjeta">
+                        <button type="button" class="boton-secundario" onclick="abrirEditarCuenta(${c.id})">
                             Editar
                         </button>
-                        <button type="button" class="boton-peligro" style="padding: 4px 10px; font-size: 0.8rem;" onclick="eliminarCuenta(${c.id})">
+                        <button type="button" class="boton-peligro" onclick="eliminarCuenta(${c.id})">
                             Eliminar
                         </button>
                     </div>
@@ -384,7 +393,7 @@ formCuenta.addEventListener("submit", async (e) => {
 });
 
 async function eliminarCuenta(id) {
-    if (!confirm("¿Querés eliminar esta cuenta? (Recordá que debe tener saldo $ 0)")) {
+    if (!confirm("¿Querés eliminar esta cuenta? Se descontará su saldo actual de tu patrimonio y de tus fondos, pero se conservará el historial de movimientos.")) {
         return;
     }
 
@@ -400,20 +409,30 @@ async function eliminarCuenta(id) {
 
 function renderizarFondos() {
     const contenedor = document.getElementById("lista-fondos-patrimonio");
+    const monedaBase = patrimonioActual?.monedaBase || "ARS";
 
     contenedor.innerHTML = fondos.map(f => {
-        const subtitulo = f.esFondoGeneral
+        const tipoTexto = f.esFondoGeneral
             ? "Fondo principal (automático)"
             : (f.esMeta ? "Meta de ahorro" : "Fondo personalizado");
+
+        const desgloseMonedas = Object.entries(f.saldosPorMoneda || {})
+            .filter(([, monto]) => Number(monto) !== 0)
+            .map(([cod, monto]) => formatoMoneda(monto, cod))
+            .join(" · ");
+
+        const subtitulo = desgloseMonedas
+            ? `${tipoTexto} · ${desgloseMonedas}`
+            : tipoTexto;
 
         const botones = f.esFondoGeneral
             ? ""
             : `
-                <div style="display: flex; gap: 10px; margin-top: 6px;">
-                    <button type="button" class="boton-secundario" style="padding: 4px 10px; font-size: 0.8rem;" onclick="abrirEditarFondo(${f.id})">
+                <div class="acciones-tarjeta">
+                    <button type="button" class="boton-secundario" onclick="abrirEditarFondo(${f.id})">
                         Editar
                     </button>
-                    <button type="button" class="boton-peligro" style="padding: 4px 10px; font-size: 0.8rem;" onclick="eliminarFondo(${f.id})">
+                    <button type="button" class="boton-peligro" onclick="eliminarFondo(${f.id})">
                         Eliminar
                     </button>
                 </div>
@@ -429,6 +448,7 @@ function renderizarFondos() {
                     <p>${subtitulo}</p>
                     ${botones}
                 </div>
+                <p class="saldo-fondo">${formatoMoneda(f.saldoTotal, monedaBase)}</p>
             </article>
         `;
     }).join("");

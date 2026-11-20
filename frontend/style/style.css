@@ -14,6 +14,10 @@
     --negativo: #d2603a;
     --positivo-fondo: #d4e7db;
     --positivo: #33a261;
+    --moneda-extra: #c89b3c;
+    --moneda-extra2: #7d6b91;
+    --moneda-extra3: #3f8f8b;
+    --moneda-extra4: #8c6d53;
 }
 
 html {
@@ -1213,19 +1217,44 @@ footer {
     border-radius: 20px;
 }
 
-.segmento.ars {
-    width: 45%;
-    background-color: var(--subordinado);
+.segmento.moneda-1,
+.indicador-moneda.moneda-1 {
+    background-color: var(--subordinado); /* #264537 Verde bosque */
 }
 
-.segmento.usd {
-    width: 35%;
-    background-color: var(--acento);
+.segmento.moneda-2,
+.indicador-moneda.moneda-2 {
+    background-color: var(--acento); /* #7e9ebc Azul */
 }
 
-.segmento.otras {
-    width: 20%;
-    background-color: var(--subordinado-claro);
+.segmento.moneda-3,
+.indicador-moneda.moneda-3 {
+    background-color: var(--subordinado-claro); /* #9ebda8 Salvia */
+}
+
+.segmento.moneda-4,
+.indicador-moneda.moneda-4 {
+    background-color: var(--negativo); /* #d2603a Terracota */
+}
+
+.segmento.moneda-5,
+.indicador-moneda.moneda-5 {
+    background-color: #c89b3c; /* Ocre dorado */
+}
+
+.segmento.moneda-6,
+.indicador-moneda.moneda-6 {
+    background-color: #7d6b91; /* Ciruela apagado */
+}
+
+.segmento.moneda-7,
+.indicador-moneda.moneda-7 {
+    background-color: #3f8f8b; /* Verde azulado */
+}
+
+.segmento.moneda-8,
+.indicador-moneda.moneda-8 {
+    background-color: #8c6d53; /* Tierra cálida */
 }
 
 .lista-monedas {
@@ -2008,4 +2037,45 @@ footer {
 
 .cerrar-plan:hover {
     text-decoration: underline;
+}
+
+/* Botones editar y eliminar */
+.tarjeta-movimiento .boton-secundario,
+.tarjeta-fondo .boton-secundario,
+.boton-secundario {
+    padding: 4px 10px;
+    border: 2px solid var(--subordinado);
+    border-radius: 10px;
+    background-color: transparent;
+    color: var(--subordinado);
+    font-family: "Urbanist", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.2;
+    cursor: pointer;
+    width: auto;
+    height: auto;
+}
+
+.tarjeta-movimiento .boton-peligro,
+.tarjeta-fondo .boton-peligro,
+.boton-peligro {
+    padding: 4px 10px;
+    border: 2px solid var(--negativo);
+    border-radius: 10px;
+    background-color: var(--negativo-fondo);
+    color: var(--negativo);
+    font-family: "Urbanist", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.2;
+    cursor: pointer;
+    width: auto;
+    height: auto;
+}
+
+.acciones-tarjeta {
+    display: flex;
+    gap: 10px;
+    margin-top: 6px;
 }

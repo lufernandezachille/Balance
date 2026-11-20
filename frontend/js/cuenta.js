@@ -1,6 +1,9 @@
-
 // URL base de la API (Backend)
 const API_URL = "http://localhost:8080/api";
+
+if (document.querySelector(".contenedor-cuenta") && localStorage.getItem("authToken")) {
+    window.location.replace("../index.html");
+}
 
 
 // ---------- 1. REGISTRO (CREAR CUENTA) ----------
@@ -377,7 +380,7 @@ if (botonCerrarSesion) {
 
             } finally {
                 localStorage.removeItem("authToken");
-                window.location.href = "iniciarsesion.html";
+                window.location.href = "cuenta.html";
             }
         }
     });

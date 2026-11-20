@@ -4,6 +4,7 @@ package com.balance.balance.model;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Map;
 
 @Entity
 @Table(name = "fondos")
@@ -38,6 +39,12 @@ public class Fondo {
     @ManyToOne
     @JoinColumn(name = "moneda_id")
     private Moneda moneda;
+
+    @Transient
+    private BigDecimal saldoTotal;
+
+    @Transient
+    private Map<String, BigDecimal> saldosPorMoneda;
 
     public Fondo() {}
 
@@ -107,5 +114,21 @@ public class Fondo {
 
     public void setMoneda(Moneda moneda) {
         this.moneda = moneda;
+    }
+
+    public BigDecimal getSaldoTotal() {
+        return saldoTotal;
+    }
+
+    public void setSaldoTotal(BigDecimal saldoTotal) {
+        this.saldoTotal = saldoTotal;
+    }
+
+    public Map<String, BigDecimal> getSaldosPorMoneda() {
+        return saldosPorMoneda;
+    }
+
+    public void setSaldosPorMoneda(Map<String, BigDecimal> saldosPorMoneda) {
+        this.saldosPorMoneda = saldosPorMoneda;
     }
 }

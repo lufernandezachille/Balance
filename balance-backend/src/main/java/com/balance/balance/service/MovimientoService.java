@@ -20,6 +20,7 @@ public class MovimientoService {
     private final FondoDetalleRepository fondoDetalleRepository;
     private final CategoriaRepository categoriaRepository;
     private final MonedaRepository monedaRepository;
+    private final SuscripcionService suscripcionService;
 
     public MovimientoService(
             MovimientoRepository movimientoRepository,
@@ -27,7 +28,8 @@ public class MovimientoService {
             FondoRepository fondoRepository,
             FondoDetalleRepository fondoDetalleRepository,
             CategoriaRepository categoriaRepository,
-            MonedaRepository monedaRepository) {
+            MonedaRepository monedaRepository,
+            SuscripcionService suscripcionService) {
 
         this.movimientoRepository = movimientoRepository;
         this.cuentaRepository = cuentaRepository;
@@ -35,6 +37,7 @@ public class MovimientoService {
         this.fondoDetalleRepository = fondoDetalleRepository;
         this.categoriaRepository = categoriaRepository;
         this.monedaRepository = monedaRepository;
+        this.suscripcionService = suscripcionService;
     }
 
     @Transactional
@@ -295,6 +298,13 @@ public class MovimientoService {
         if (montoMinimo != null && montoMaximo != null &&
                 montoMinimo.compareTo(montoMaximo) > 0) {
             throw new RuntimeException("El monto mínimo no puede ser mayor al máximo");
+        }
+
+        if (!suscripcionService.esPremium(usuarioId)) {
+            LocalDate limiteGratis = LocalDate.now().minusMonths(3);
+            if (fechaDesde == null || fechaDesde.isBefore(limiteGratis)) {
+                fechaDesde = limiteGratis;
+            }
         }
 
         return movimientoRepository.filtrarMovimientos(

@@ -1,28 +1,39 @@
-
 package com.balance.balance.service;
 
 import com.balance.balance.model.Fondo;
 import com.balance.balance.model.FondoDetalle;
+import com.balance.balance.model.Usuario;
 import com.balance.balance.repository.FondoRepository;
 import com.balance.balance.repository.FondoDetalleRepository;
+import com.balance.balance.repository.UsuarioRepository;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class FondoService {
 
     private final FondoRepository fondoRepository;
     private final FondoDetalleRepository fondoDetalleRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final CotizacionService cotizacionService;
 
     public FondoService(
             FondoRepository fondoRepository,
-            FondoDetalleRepository fondoDetalleRepository) {
+            FondoDetalleRepository fondoDetalleRepository,
+            UsuarioRepository usuarioRepository,
+            CotizacionService cotizacionService) {
 
         this.fondoRepository = fondoRepository;
         this.fondoDetalleRepository = fondoDetalleRepository;
+        this.usuarioRepository = usuarioRepository;
+        this.cotizacionService = cotizacionService;
     }
 
     public Fondo crearFondo(Fondo fondo) {
@@ -30,8 +41,43 @@ public class FondoService {
         return fondoRepository.save(fondo);
     }
 
+    @Transactional(readOnly = true)
     public List<Fondo> listarFondos(Long usuarioId) {
-        return fondoRepository.findByUsuarioId(usuarioId);
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        String monedaBase = usuario.getMonedaPredeterminada() != null
+                ? usuario.getMonedaPredeterminada().getCodigo()
+                : "ARS";
+
+        List<Fondo> fondos = fondoRepository.findByUsuarioId(usuarioId);
+
+        for (Fondo fondo : fondos) {
+            List<FondoDetalle> detalles = fondoDetalleRepository.findByFondoId(fondo.getId());
+
+            Map<String, BigDecimal> porMoneda = new HashMap<>();
+            for (FondoDetalle d : detalles) {
+                if (d.getCuenta() == null || d.getSaldoAsignado() == null) continue;
+                String cod = d.getCuenta().getMoneda().getCodigo();
+                porMoneda.put(cod, porMoneda.getOrDefault(cod, BigDecimal.ZERO).add(d.getSaldoAsignado()));
+            }
+
+            BigDecimal totalConvertido = BigDecimal.ZERO;
+            for (Map.Entry<String, BigDecimal> entry : porMoneda.entrySet()) {
+                if (entry.getKey().equals(monedaBase)) {
+                    totalConvertido = totalConvertido.add(entry.getValue());
+                } else {
+                    totalConvertido = totalConvertido.add(
+                            cotizacionService.convertir(entry.getValue(), entry.getKey(), monedaBase)
+                    );
+                }
+            }
+
+            fondo.setSaldosPorMoneda(porMoneda);
+            fondo.setSaldoTotal(totalConvertido.setScale(2, RoundingMode.HALF_UP));
+        }
+
+        return fondos;
     }
 
     public Fondo buscarFondo(Long id, Long usuarioId) {

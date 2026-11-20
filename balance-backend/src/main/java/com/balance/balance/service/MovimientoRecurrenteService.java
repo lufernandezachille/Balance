@@ -192,22 +192,26 @@ public class MovimientoRecurrenteService {
                                         recurrente.getId(), fecha);
 
                 if (!esExcepcion) {
+                    try {
+                        Movimiento movimiento = new Movimiento();
 
-                    Movimiento movimiento = new Movimiento();
+                        movimiento.setUsuario(recurrente.getUsuario());
+                        movimiento.setTipo(recurrente.getTipo());
+                        movimiento.setMonto(recurrente.getMonto());
+                        movimiento.setMoneda(recurrente.getMoneda());
+                        movimiento.setCategoria(recurrente.getCategoria());
+                        movimiento.setCuenta(recurrente.getCuenta());
+                        movimiento.setFondo(recurrente.getFondo());
+                        movimiento.setFecha(fecha);
+                        movimiento.setDescripcion(recurrente.getDescripcion());
+                        movimiento.setEsRecurrente(true);
 
-                    movimiento.setUsuario(recurrente.getUsuario());
-                    movimiento.setTipo(recurrente.getTipo());
-                    movimiento.setMonto(recurrente.getMonto());
-                    movimiento.setMoneda(recurrente.getMoneda());
-                    movimiento.setCategoria(recurrente.getCategoria());
-                    movimiento.setCuenta(recurrente.getCuenta());
-                    movimiento.setFondo(recurrente.getFondo());
-                    movimiento.setFecha(fecha);
-                    movimiento.setDescripcion(recurrente.getDescripcion());
-                    movimiento.setEsRecurrente(true);
-
-                    movimientoService.crearMovimiento(
-                            movimiento, recurrente.getUsuario().getId());
+                        movimientoService.crearMovimiento(
+                                movimiento, recurrente.getUsuario().getId());
+                    } catch (RuntimeException e) {
+                        // Si no hay saldo suficiente en esa fecha, no bloqueamos el resto
+                        break;
+                    }
                 }
 
                 // Calculamos la siguiente fecha.

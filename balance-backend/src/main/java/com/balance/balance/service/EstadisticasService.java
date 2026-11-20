@@ -2,7 +2,7 @@
 package com.balance.balance.service;
 
 import com.balance.balance.dto.MetaRespuesta;
-import com.balance.balance.dto.estadisticas.EstadisticasRespuesta;
+import com.balance.balance.dto.EstadisticasRespuesta;
 import com.balance.balance.model.Cuenta;
 import com.balance.balance.model.Movimiento;
 import com.balance.balance.model.Usuario;

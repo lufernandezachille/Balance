@@ -6,6 +6,7 @@ import com.balance.balance.repository.*;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Propagation;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -40,7 +41,7 @@ public class MovimientoService {
         this.suscripcionService = suscripcionService;
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Movimiento crearMovimiento(Movimiento movimiento, Long usuarioId) {
         validarRelaciones(movimiento, usuarioId);
         aplicarImpacto(movimiento, true);

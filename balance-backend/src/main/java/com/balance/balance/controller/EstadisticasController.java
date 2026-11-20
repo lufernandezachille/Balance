@@ -1,7 +1,7 @@
 
 package com.balance.balance.controller;
 
-import com.balance.balance.dto.estadisticas.EstadisticasRespuesta;
+import com.balance.balance.dto.EstadisticasRespuesta;
 import com.balance.balance.service.EstadisticasService;
 
 import org.springframework.security.core.Authentication;
